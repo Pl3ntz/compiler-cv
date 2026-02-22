@@ -1,0 +1,136 @@
+version: "0.2"
+language: pt_BR,en
+files:
+  - "data/cv.pt.yaml"
+  - "data/cv.en.yaml"
+  - "data/ui.yaml"
+languageSettings:
+  - languageId: yaml
+    locale: pt_BR,en
+dictionaries:
+  - pt_BR
+  - en_US
+import:
+  - "@cspell/dict-pt-br/cspell-ext.json"
+caseSensitive: false
+words:
+  # Nomes proprios
+  - Plentz
+  - Vitor
+  - vitor
+  - plentz
+  - Chapeco
+  - linkedin
+  - github
+
+  # Termos tecnicos
+  - Laravel
+  - Vue
+  - PostgreSQL
+  - Inertia
+  - Filament
+  - SaaS
+  - DevOps
+  - isCOBOL
+  - COBOL
+  - Kamailio
+  - Asterisk
+  - Brasilfone
+  - Whitelabel
+  - whitelabel
+  - PHPUnit
+  - SonarQube
+  - RabbitMQ
+  - RESTful
+  - GraphQL
+  - ChatGPT
+  - microservices
+  - microsservicos
+  - containerizacao
+  - Tecnologo
+  - manutenibilidade
+  - GitLab
+  - Nginx
+  - SQLite
+  - MySQL
+  - Tailwind
+  - Symfony
+
+  # Portugues sem acentos (ASCII nos YAMLs)
+  - aplicacoes
+  - escalaveis
+  - logistica
+  - Logistica
+  - notificacoes
+  - otimizacao
+  - Otimizacao
+  - historico
+  - refatoracao
+  - codigo
+  - Codigo
+  - solucoes
+  - Formacao
+  - Academica
+  - Lideranca
+  - Aplicacao
+  - Motivacao
+  - Compreensao
+  - representacao
+  - Principios
+  - Aplicacoes
+  - Seguranca
+  - seguranca
+  - Informacao
+  - protecao
+  - recuperacao
+  - manutencao
+  - Autonomo
+  - gestao
+  - Gestao
+  - alcancando
+  - reducao
+  - notificacao
+  - Construi
+  - avancada
+  - dinamicos
+  - periodica
+  - usuario
+  - automacao
+  - Automacao
+  - implantacao
+  - operacoes
+  - unitarios
+  - integracao
+  - Integracao
+  - simulacoes
+  - monolitico
+  - solucao
+  - flexivel
+  - comunicacao
+  - Comunicacao
+  - padroes
+  - relatorios
+  - implementacao
+  - telecomunicacoes
+  - Telecomunicacoes
+  - multiplos
+  - servico
+  - escalavel
+  - correcoes
+  - tecnicas
+  - Tecnicas
+  - especificacoes
+  - mudancas
+  - aplicacao
+  - Modernizacao
+  - consistencia
+  - autenticacao
+  - autorizacao
+  - Programacao
+  - Resolucao
+  - Portugues
+  - Avancado
+  - Basico
+  - Alemao
+  - Frances
+  - Curriculo

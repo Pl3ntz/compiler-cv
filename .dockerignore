@@ -1,0 +1,14 @@
+node_modules
+dist
+.git
+.gitignore
+.DS_Store
+.env
+.env.local
+*.md
+*.log
+public/pdf
+jake_template
+Jake_s_Resume.zip
+vitor-plentz*.pdf
+tests

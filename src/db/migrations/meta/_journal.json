@@ -1,0 +1,41 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1771765975111,
+      "tag": "0000_many_zombie",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1771769110711,
+      "tag": "0001_third_silvermane",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1771789947810,
+      "tag": "0002_nebulous_mordo",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1771957625785,
+      "tag": "0003_opposite_ares",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1772000000000,
+      "tag": "0004_add_custom_sections",
+      "breakpoints": true
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+ALTER TABLE "cvs" ADD COLUMN "template_id" text DEFAULT 'jake' NOT NULL;

@@ -1,0 +1,17 @@
+node_modules/
+dist/
+public/pdf/
+*.log
+.DS_Store
+.env
+.env.local
+
+# Template source files
+Jake_s_Resume.zip
+jake_template/
+
+# Personal PDFs
+vitor-plentz*.pdf
+
+# Claude Code local settings
+.claude/

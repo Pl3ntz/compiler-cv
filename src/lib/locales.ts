@@ -1,0 +1,10 @@
+export const LOCALES = ['pt', 'en'] as const
+
+export type Locale = (typeof LOCALES)[number]
+
+export const DEFAULT_LOCALE: Locale = 'pt'
+
+export const LOCALE_LABELS: Record<Locale, string> = {
+  pt: 'Portugues',
+  en: 'English',
+}

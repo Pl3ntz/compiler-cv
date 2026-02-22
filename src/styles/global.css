@@ -1,0 +1,80 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-brand: 'Cinzel', serif;
+
+  /* Forge backgrounds (navy base) */
+  --color-forge-950: #080b12;
+  --color-forge-900: #0c1019;
+  --color-forge-850: #101520;
+  --color-forge-800: #151b28;
+  --color-forge-750: #1a2133;
+  --color-forge-700: #1f2940;
+  --color-forge-600: #2a3550;
+  --color-forge-500: #354260;
+
+  /* Text */
+  --color-text-primary: #e8eaf0;
+  --color-text-secondary: #94a0b8;
+  --color-text-muted: #5e6d85;
+
+  /* Ember (primary accent) */
+  --color-ember-600: #e55a2b;
+  --color-ember-500: #ff6b35;
+  --color-ember-400: #ff8c42;
+  --color-ember-300: #ffad60;
+
+  /* Molten (secondary accent) */
+  --color-molten-600: #b8862e;
+  --color-molten-500: #d4a04a;
+  --color-molten-400: #e8b84a;
+  --color-molten-300: #f0c85a;
+
+  /* Status */
+  --color-success: #22c55e;
+  --color-warning: #eab308;
+  --color-error: #ef4444;
+  --color-info: #3b82f6;
+  --color-score-good: #22c55e;
+  --color-score-mid: #eab308;
+  --color-score-low: #ef4444;
+}
+
+@layer base {
+  html {
+    background-color: var(--color-forge-950);
+    color: var(--color-text-primary);
+  }
+
+  body {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* Scrollbar styling for dark theme */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-forge-900);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-forge-600);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-forge-500);
+}
+
+/* Fade-in animation for SSR-safe components */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}

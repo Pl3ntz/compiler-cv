@@ -1,0 +1,13 @@
+pt:
+  downloadPdf: Baixar PDF
+  switchLang: English
+  switchLangUrl: /en
+  pageTitle: "Curriculo - Vitor Plentz"
+  pageDescription: "Curriculo de Vitor Plentz - Desenvolvedor Full Stack PHP"
+
+en:
+  downloadPdf: Download PDF
+  switchLang: Portugues
+  switchLangUrl: /pt
+  pageTitle: "Resume - Vitor Plentz"
+  pageDescription: "Resume of Vitor Plentz - Full Stack PHP Developer"
