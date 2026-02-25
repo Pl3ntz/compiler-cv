@@ -274,7 +274,7 @@ Get an HTML preview of the sample CV.
 
 ## AI Endpoints
 
-All AI endpoints require authentication and a valid `GEMINI_API_KEY`.
+All AI endpoints require authentication and a valid `GROQ_API_KEY`.
 
 ### `POST /api/cv/:cvId/ats-score`
 

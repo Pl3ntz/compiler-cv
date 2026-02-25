@@ -52,7 +52,7 @@ ADMIN_SEED_PASSWORD=<strong-admin-password>
 SEED_DEMO=false
 
 # AI (optional)
-GEMINI_API_KEY=<your-gemini-api-key>
+GROQ_API_KEY=<your-groq-api-key>
 ```
 
 **Important:** Generate strong, unique passwords:
@@ -309,7 +309,7 @@ deploy:
 
 ### Slow AI responses
 
-- Check your `GEMINI_API_KEY` quota at [AI Studio](https://aistudio.google.com/)
+- Check your `GROQ_API_KEY` quota at [Groq Console](https://console.groq.com)
 - ATS scores are cached for 5 minutes — second request should be instant
 - The 30-second timeout prevents hanging requests
 

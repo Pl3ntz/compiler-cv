@@ -41,7 +41,7 @@ services:
       ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@compiler.com}
       ADMIN_SEED_PASSWORD: ${ADMIN_SEED_PASSWORD}
       SEED_DEMO: ${SEED_DEMO:-false}
-      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      GROQ_API_KEY: ${GROQ_API_KEY:-}
     depends_on:
       db:
         condition: service_healthy

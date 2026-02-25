@@ -175,8 +175,8 @@ Key components:
 See [AI Features](./AI.md) for detailed documentation.
 
 Key design decisions:
-- All AI calls go through `src/lib/gemini-client.ts`
-- Structured JSON output via Gemini response schemas
+- All AI calls go through `src/lib/ai-client.ts`
+- JSON output via Groq `json_object` mode with schema in prompt
 - Zod validation on all AI responses
 - Input stripping (removes `customLatex`, `templateId`) to reduce token count
 - Compact JSON serialization (no pretty-print)

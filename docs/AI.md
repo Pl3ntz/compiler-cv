@@ -1,20 +1,20 @@
 # AI Features Documentation
 
-Compiler CV integrates with Google Gemini 2.5 Flash to provide three AI-powered features: PDF parsing, ATS scoring, and CV translation.
+Compiler CV integrates with Groq (Llama 3.3 70B) to provide three AI-powered features: PDF parsing, ATS scoring, and CV translation.
 
-All AI logic is centralized in `src/lib/gemini-client.ts`.
+All AI logic is centralized in `src/lib/ai-client.ts`.
 
 ---
 
 ## Setup
 
-AI features are optional. To enable them, set the `GEMINI_API_KEY` environment variable:
+AI features are optional. To enable them, set the `GROQ_API_KEY` environment variable:
 
 ```env
-GEMINI_API_KEY=your-api-key-here
+GROQ_API_KEY=your-api-key-here
 ```
 
-Get a free API key at [AI Studio](https://aistudio.google.com/apikey).
+Get a free API key at [Groq Console](https://console.groq.com).
 
 If the key is not set, AI endpoints will return an error but the rest of the application works normally.
 
@@ -24,11 +24,11 @@ If the key is not set, AI endpoints will return an error but the rest of the app
 
 | Setting | Value | Reason |
 |---------|-------|--------|
-| Model | `gemini-2.5-flash` | Fast, cost-effective for structured tasks |
+| Model | `llama-3.3-70b-versatile` | 128K context, fast inference on Groq |
+| Provider | Groq | OpenAI-compatible API, generous free tier |
 | Timeout | 30 seconds | Fail fast if the API is slow |
 | Temperature | `0` | Deterministic output for scoring and translation |
-| Thinking budget | `1024` tokens | Limits internal reasoning tokens for speed |
-| Response format | `application/json` | Structured JSON with schema validation |
+| Response format | `json_object` mode | Schema embedded in prompt, validated with Zod |
 
 ---
 
@@ -40,11 +40,13 @@ Takes a PDF resume file and extracts all content into the structured CV format u
 
 ### How It Works
 
-1. PDF buffer is converted to base64
-2. Sent to Gemini as an inline PDF document
-3. A response JSON schema (derived from Zod's `cvInputSchema`) constrains the output
-4. Gemini extracts: header info, summary, education, experience, projects, skills, languages
+1. PDF buffer is parsed with `pdf-parse` to extract raw text
+2. Extracted text is sent to Groq as a user message
+3. The JSON schema (derived from Zod's `cvInputSchema`) is embedded in the system prompt
+4. Groq extracts: header info, summary, education, experience, projects, skills, languages
 5. Response is validated with Zod before returning
+
+Note: Unlike providers that accept inline PDFs, Groq requires text-based input. The `pdf-parse` library handles text extraction locally before sending to the API. Image-based PDFs (scanned documents without OCR) are not supported.
 
 ### Prompt Strategy
 
@@ -60,7 +62,8 @@ The prompt instructs the AI to:
 - File must be `application/pdf` MIME type
 - First 4 bytes must be PDF magic bytes (`%PDF`)
 - Max file size: 5MB
-- Gemini response validated against `cvInputSchema`
+- `pdf-parse` must extract non-empty text
+- Groq response validated against `cvInputSchema`
 
 ---
 
@@ -103,14 +106,13 @@ Evaluates a CV for compatibility with major Applicant Tracking Systems (Workday,
 
 1. **Input stripping** — `customLatex` (up to 100KB!) and `templateId` are removed before sending to the AI, saving significant tokens
 2. **Compact JSON** — `JSON.stringify()` without indentation (no `null, 2`)
-3. **Thinking budget** — Limited to 1024 tokens to reduce "reasoning" overhead
-4. **In-memory cache** — Results cached for 5 minutes using SHA-256 hash of input:
+3. **In-memory cache** — Results cached for 5 minutes using SHA-256 hash of input:
    ```
    Cache key = SHA256({ stripped CV data, locale }).slice(0, 16)
    TTL = 5 minutes
    ```
    Same CV analyzed twice within 5 minutes returns instantly from cache.
-5. **Concise prompt** — Minimal instruction set since the JSON response schema already communicates structure
+4. **Concise prompt** — Minimal instruction set with JSON schema embedded in the system prompt
 
 ### Cache Behavior
 
@@ -152,7 +154,6 @@ Takes a CV in one language and translates all content to the target language whi
 Same as ATS scoring:
 - Input stripping (no `customLatex`/`templateId`)
 - Compact JSON serialization
-- Thinking budget limited to 1024 tokens
 - 30-second timeout
 
 Translation does NOT use caching because different source CVs translate differently.
@@ -165,23 +166,36 @@ All AI functions handle these error cases:
 
 | Error | Handling |
 |-------|----------|
-| Missing API key | Throws `"GEMINI_API_KEY is not configured"` |
+| Missing API key | Throws `"GROQ_API_KEY is not configured"` |
 | API timeout (>30s) | Throws `"Request timeout"` |
-| Content blocked by safety filter | Throws with block reason |
+| Empty PDF text | Throws `"Could not extract text from PDF"` |
 | Empty response | Throws descriptive error |
 | Invalid JSON response | Throws `"Invalid response from AI service"` |
 | Zod validation failure | Throws with validation details |
+| Rate limit (429) | Caught as `rate_limit` or `429` in error message |
+
+---
+
+## JSON Schema Approach
+
+Groq does not support strict `json_schema` response format like some providers. Instead:
+
+1. The JSON schema is derived from Zod schemas using `z.toJSONSchema()`
+2. The schema is serialized and embedded in the system prompt
+3. `response_format: { type: 'json_object' }` ensures the response is valid JSON
+4. Zod validates the parsed response on the client side
+
+This approach is reliable with Llama 3.3 70B, which follows JSON schema instructions well.
 
 ---
 
 ## Cost Considerations
 
-- **Gemini 2.5 Flash** is one of the cheapest models available
+- **Groq free tier** provides generous rate limits for personal/small-team use
 - Input stripping saves ~50-80% of tokens for CVs with custom LaTeX
 - Compact JSON saves ~20-30% of input tokens vs pretty-printed
 - ATS cache eliminates duplicate API calls within 5 minutes
-- Thinking budget cap prevents runaway token usage
-- Free tier API key is sufficient for personal/small-team use
+- `pdf-parse` runs locally — no API cost for text extraction
 
 ---
 
@@ -190,13 +204,13 @@ All AI functions handle these error cases:
 To add a new AI feature:
 
 1. Define a Zod schema for the expected response in `src/lib/zod-schemas/`
-2. Create a response schema builder (see `buildAtsResponseSchema()` pattern)
-3. Write a prompt builder function
-4. Implement the async function following the existing pattern:
+2. Write a prompt builder function that includes the JSON schema in the system prompt
+3. Implement the async function following the existing pattern:
    - Strip input with `stripForAi()`
-   - Build prompt and call `ai.models.generateContent()`
+   - Build prompt with schema via `z.toJSONSchema()`
+   - Call `groq.chat.completions.create()` with `json_object` response format
    - Race with timeout
    - Parse and validate response with Zod
    - Optionally add caching
-5. Add the API route in `src/server/api/cv.ts`
-6. Add rate limiting if the operation is expensive
+4. Add the API route in `src/server/api/cv.ts`
+5. Add rate limiting if the operation is expensive

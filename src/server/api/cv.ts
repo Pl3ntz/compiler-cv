@@ -17,7 +17,7 @@ import { generatePdf, generatePdfFromCustomLatex } from '../../lib/pdf-generator
 import { isValidUuid } from '../../lib/validation.js'
 import { getFormDefaults } from '../../lib/form-defaults.js'
 import { checkRateLimit, rateLimitResponse } from '../../lib/rate-limit.js'
-import { analyzeCvAtsScore, parseCvFromPdf, translateCvContent } from '../../lib/gemini-client.js'
+import { analyzeCvAtsScore, parseCvFromPdf, translateCvContent } from '../../lib/ai-client.js'
 import { generateTexFromData } from '../../../scripts/generate-tex.js'
 import type { Locale } from '../../lib/locales.js'
 import { readFileSync } from 'node:fs'
@@ -448,10 +448,6 @@ app.post('/:cvId/ats-score', async (c) => {
     return c.json({ error: 'ID de CV inválido' }, 400)
   }
 
-  if (!process.env.GEMINI_API_KEY) {
-    return c.json({ error: 'Análise ATS não disponível' }, 503)
-  }
-
   const userId = c.get('user').id
 
   const { allowed, retryAfterMs } = checkRateLimit(`ats-score:${userId}`, {
@@ -483,7 +479,7 @@ app.post('/:cvId/ats-score', async (c) => {
     const message = error instanceof Error ? error.message : 'ATS analysis failed'
     console.error('[ats-score] ATS analysis failed:', message)
 
-    if (message.includes('RESOURCE_EXHAUSTED') || message.includes('429')) {
+    if (message.includes('RESOURCE_EXHAUSTED') || message.includes('rate_limit') || message.includes('429')) {
       return c.json({ error: 'Serviço de IA temporariamente indisponível. Tente novamente mais tarde.' }, 503)
     }
 
@@ -498,7 +494,7 @@ app.post('/:cvId/import', async (c) => {
     return c.json({ error: 'ID de CV inválido' }, 400)
   }
 
-  if (!process.env.GEMINI_API_KEY) {
+  if (!process.env.GROQ_API_KEY) {
     return c.json({ error: 'Importação de PDF não disponível' }, 503)
   }
 
@@ -559,13 +555,13 @@ app.post('/:cvId/import', async (c) => {
     const message = error instanceof Error ? error.message : 'Failed to parse CV'
     console.error('[import] PDF import failed:', message)
 
-    if (message.includes('RESOURCE_EXHAUSTED') || message.includes('429')) {
+    if (message.includes('RESOURCE_EXHAUSTED') || message.includes('rate_limit') || message.includes('429')) {
       return c.json({ error: 'Serviço de IA temporariamente indisponível. Tente novamente mais tarde.' }, 503)
     }
     if (message.includes('blocked by safety')) {
       return c.json({ error: 'O conteúdo do PDF foi bloqueado pelo filtro de segurança. Tente um arquivo diferente.' }, 422)
     }
-    if (message.includes('empty response')) {
+    if (message.includes('empty response') || message.includes('Could not extract text')) {
       return c.json({ error: 'Não foi possível ler o PDF. Verifique se o arquivo não está protegido ou corrompido.' }, 422)
     }
 
@@ -575,8 +571,8 @@ app.post('/:cvId/import', async (c) => {
 
 // POST /import-pdf — one-click: upload PDF → parse → create CV with data → return id
 app.post('/import-pdf', async (c) => {
-  if (!process.env.GEMINI_API_KEY) {
-    return c.json({ error: 'Importação de PDF não disponível. Configure GEMINI_API_KEY.' }, 503)
+  if (!process.env.GROQ_API_KEY) {
+    return c.json({ error: 'Importação de PDF não disponível. Configure GROQ_API_KEY.' }, 503)
   }
 
   const userId = c.get('user').id
@@ -617,22 +613,22 @@ app.post('/import-pdf', async (c) => {
     return c.json({ error: 'Arquivo não é um PDF válido' }, 400)
   }
 
-  // Parse PDF with Gemini (auto-detect locale)
+  // Parse PDF with AI (auto-detect locale)
   let cvData: import('../../lib/zod-schemas/cv.js').CvInput
   try {
     cvData = await parseCvFromPdf(buffer)
-    console.log('[import-pdf] Gemini parsed successfully, locale:', cvData.locale)
+    console.log('[import-pdf] AI parsed successfully, locale:', cvData.locale)
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Failed to parse CV'
-    console.error('[import-pdf] Gemini parse failed:', message)
+    console.error('[import-pdf] AI parse failed:', message)
 
-    if (message.includes('RESOURCE_EXHAUSTED') || message.includes('429')) {
+    if (message.includes('RESOURCE_EXHAUSTED') || message.includes('rate_limit') || message.includes('429')) {
       return c.json({ error: 'Serviço de IA temporariamente indisponível. Tente novamente mais tarde.' }, 503)
     }
     if (message.includes('blocked by safety')) {
       return c.json({ error: 'O conteúdo do PDF foi bloqueado pelo filtro de segurança.' }, 422)
     }
-    if (message.includes('empty response')) {
+    if (message.includes('empty response') || message.includes('Could not extract text')) {
       return c.json({ error: 'Não foi possível ler o PDF. Verifique se não está protegido ou corrompido.' }, 422)
     }
     return c.json({ error: 'Falha ao extrair dados do PDF. Tente um arquivo diferente.' }, 422)
@@ -797,7 +793,7 @@ app.post('/:cvId/clone-translate', async (c) => {
     languages: { title: cvData.languages.title, items: cvData.languages.items.map(l => ({ ...l })) },
   }
 
-  // Try translation via Gemini, fallback to copy with locale section titles
+  // Try translation via AI, fallback to copy with locale section titles
   let translatedInput: import('../../lib/zod-schemas/cv.js').CvInput
   let translated = false
   try {

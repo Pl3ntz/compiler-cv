@@ -26,7 +26,7 @@ A modern open-source platform for building, managing, and generating professiona
 - [Architecture](#architecture)
 - [API Reference](#api-reference)
 - [Database Schema](#database-schema)
-- [AI Features (Gemini)](#ai-features-gemini)
+- [AI Features (Groq)](#ai-features-groq)
 - [PDF Generation Pipeline](#pdf-generation-pipeline)
 - [Templates](#templates)
 - [Internationalization (i18n)](#internationalization-i18n)
@@ -54,7 +54,7 @@ A modern open-source platform for building, managing, and generating professiona
 - Automatic LaTeX injection protection with character escaping
 - Custom LaTeX source editing for advanced users
 
-### AI-Powered Features (Google Gemini)
+### AI-Powered Features (Groq)
 - **ATS Score Analysis** — Scores your CV 0-100 for ATS compatibility (Workday, Greenhouse, Lever, iCIMS) with per-section feedback and actionable suggestions
 - **PDF Import** — Upload an existing PDF resume and let AI extract all structured data into editable form fields
 - **Clone & Translate** — Clone a CV and translate it to another language with one click
@@ -104,7 +104,7 @@ A modern open-source platform for building, managing, and generating professiona
 | **PDF** | Tectonic | 0.15 | XeTeX LaTeX compiler |
 | | EJS | 3.1 | LaTeX template engine |
 | | p-queue | 9.1 | Concurrency queue |
-| **AI** | Google Gemini | 2.5-flash | CV parsing, ATS scoring, translation |
+| **AI** | Groq (Llama 3.3) | 70b-versatile | CV parsing, ATS scoring, translation |
 | **Validation** | Zod | 4.3 | Schema validation |
 | **Infra** | Docker | Latest | Containerization |
 | | Traefik | Latest | Reverse proxy (production) |
@@ -184,7 +184,7 @@ bun run dev:server       # Hono server on port 4321
 | `SEED_DEMO` | No | `false` | Set to `true` to create a demo user with sample CVs |
 | `DEMO_EMAIL` | No | `demo@cvbuilder.local` | Demo user email |
 | `DEMO_PASSWORD` | No | `demo12341234` | Demo user password |
-| `GEMINI_API_KEY` | No | — | Google Gemini API key for AI features. Get one free at [AI Studio](https://aistudio.google.com/apikey) |
+| `GROQ_API_KEY` | No | — | Groq API key for AI features. Get one free at [Groq Console](https://console.groq.com) |
 | `HOST` | No | `0.0.0.0` | Server bind address |
 | `PORT` | No | `4321` | Server port |
 
@@ -197,7 +197,7 @@ BETTER_AUTH_URL=http://localhost:4321
 PDF_CONCURRENCY=2
 ADMIN_EMAIL=admin@example.com
 ADMIN_SEED_PASSWORD=change-me-on-first-deploy
-GEMINI_API_KEY=your-gemini-api-key
+GROQ_API_KEY=your-groq-api-key
 ```
 
 ---
@@ -268,7 +268,7 @@ compiler-cv/
 │   ├── lib/
 │   │   ├── auth.ts                # Better Auth server config
 │   │   ├── auth-client.ts         # Client-side auth helpers
-│   │   ├── gemini-client.ts       # Gemini AI: parse PDF, ATS score, translate
+│   │   ├── ai-client.ts           # Groq AI: parse PDF, ATS score, translate
 │   │   ├── pdf-generator.ts       # PDF generation orchestrator
 │   │   ├── pdf-queue.ts           # p-queue concurrency instance
 │   │   ├── preview-renderer.ts    # HTML preview generation
@@ -356,7 +356,7 @@ compiler-cv/
 │  ┌─────────────────────────┼──────────────────────────────────┐  │
 │  │                    Libraries                                │  │
 │  │  ┌────────────┐  ┌─────┴──────┐  ┌─────────────────────┐  │  │
-│  │  │  Gemini AI │  │  Drizzle   │  │   PDF Generator     │  │  │
+│  │  │  Groq AI   │  │  Drizzle   │  │   PDF Generator     │  │  │
 │  │  │ Parse PDF  │  │    ORM     │  │ EJS → LaTeX → PDF   │  │  │
 │  │  │ ATS Score  │  │            │  │ (Tectonic + Queue)  │  │  │
 │  │  │ Translate  │  │            │  │                     │  │  │
@@ -553,9 +553,9 @@ All item tables share: `id (uuid PK)`, `cvId (uuid FK → cvs CASCADE)`, `orderI
 
 ---
 
-## AI Features (Gemini)
+## AI Features (Groq)
 
-All AI features use **Google Gemini 2.5 Flash** with structured JSON output via response schemas.
+All AI features use **Llama 3.3 70B** via Groq with `json_object` response format and Zod schema validation.
 
 ### ATS Score Analysis
 
@@ -568,7 +568,6 @@ Evaluates your CV for compatibility with major Applicant Tracking Systems (Workd
 
 **Optimizations:**
 - `temperature: 0` for deterministic results
-- `thinkingBudget: 1024` to limit reasoning tokens
 - In-memory cache with SHA-256 key and 5-minute TTL
 - Strips `customLatex` and `templateId` from input (saves tokens)
 - Compact JSON serialization (no pretty-print)
@@ -576,7 +575,7 @@ Evaluates your CV for compatibility with major Applicant Tracking Systems (Workd
 
 ### PDF Import
 
-Upload an existing PDF resume and the AI extracts all data into the structured CV format:
+Upload an existing PDF resume. Text is extracted locally via `pdf-parse`, then the AI structures all data into the CV format:
 - Auto-detects language (Portuguese or English)
 - Extracts: contact info, summary, education, experience, projects, skills, languages
 - Populates all form fields automatically
@@ -657,7 +656,7 @@ Templates are defined in `src/lib/templates.ts` and consist of:
 
 - **UI elements:** Form labels, button text, placeholders, hints
 - **Section titles:** Default titles per locale (e.g., "Experiencia Profissional" vs "Experience")
-- **AI translation:** Full content translation via Gemini when cloning CVs
+- **AI translation:** Full content translation via Groq when cloning CVs
 
 ---
 

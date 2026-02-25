@@ -55,7 +55,7 @@ BETTER_AUTH_URL=http://localhost:4321
 PDF_CONCURRENCY=2
 ADMIN_EMAIL=admin@example.com
 ADMIN_SEED_PASSWORD=localdevpassword
-GEMINI_API_KEY=          # Optional: get from https://aistudio.google.com/apikey
+GROQ_API_KEY=            # Optional: get from https://console.groq.com
 ```
 
 ### Database Setup
@@ -380,5 +380,5 @@ ADMIN_SEED_PASSWORD=localdevpassword
 SEED_DEMO=true
 DEMO_EMAIL=demo@cvbuilder.local
 DEMO_PASSWORD=demo12341234
-GEMINI_API_KEY=
+GROQ_API_KEY=
 ```
