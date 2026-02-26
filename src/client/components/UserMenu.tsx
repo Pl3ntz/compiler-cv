@@ -103,6 +103,7 @@ export default function UserMenu({ userName, userEmail, isAdmin }: Props) {
           {isAdmin && (
             <a href="/admin" className="flex items-center w-full px-3 py-2 text-sm text-text-secondary hover:bg-forge-600 hover:text-text-primary transition-colors min-h-[44px]" role="menuitem">Admin</a>
           )}
+          <a href="/apoie" className="flex items-center w-full px-3 py-2 text-sm text-text-secondary hover:bg-forge-600 hover:text-text-primary transition-colors min-h-[44px]" role="menuitem">Apoie o projeto</a>
           <button
             type="button"
             className="flex items-center w-full px-3 py-2 text-sm text-error hover:bg-error/10 transition-colors border-none bg-transparent cursor-pointer min-h-[44px]"

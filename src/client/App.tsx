@@ -16,6 +16,9 @@ import AdminDashboardPage from './pages/AdminDashboardPage.js'
 import AdminUsersPage from './pages/AdminUsersPage.js'
 import AdminUserDetailPage from './pages/AdminUserDetailPage.js'
 import NotFoundPage from './pages/NotFoundPage.js'
+import AtsAnalysisPage from './pages/AtsAnalysisPage.js'
+import AdminFeedbackPage from './pages/AdminFeedbackPage.js'
+import SupportPage from './pages/SupportPage.js'
 
 function RequireAuth() {
   const { user, loading } = useAuth()
@@ -58,6 +61,14 @@ const router = createBrowserRouter([
     element: <HomePage />,
   },
   {
+    path: '/analise-ats',
+    element: <AtsAnalysisPage />,
+  },
+  {
+    path: '/apoie',
+    element: <SupportPage />,
+  },
+  {
     element: <RedirectIfAuth />,
     children: [
       {
@@ -97,6 +108,7 @@ const router = createBrowserRouter([
           { path: '/admin', element: <AdminDashboardPage /> },
           { path: '/admin/users', element: <AdminUsersPage /> },
           { path: '/admin/users/:userId', element: <AdminUserDetailPage /> },
+          { path: '/admin/feedback', element: <AdminFeedbackPage /> },
         ],
       },
     ],

@@ -6,6 +6,7 @@ interface Stats {
   userCount: number
   cvCount: number
   activeSessionCount: number
+  feedbackCount: number
   recentUsers: Array<{
     id: string
     name: string
@@ -46,15 +47,20 @@ export default function AdminDashboardPage() {
     >
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-text-primary">Painel Admin</h1>
-        <Link to="/admin/users" className="px-4 py-2.5 bg-ember-500 text-white text-sm font-medium rounded-lg hover:bg-ember-400 transition-all shadow-lg shadow-ember-500/20 no-underline">
-          Gerenciar Usuários
-        </Link>
+        <div className="flex items-center gap-2">
+          <Link to="/admin/feedback" className="px-4 py-2.5 text-sm font-medium text-text-secondary border border-forge-500 rounded-lg hover:bg-forge-700 hover:text-text-primary transition-all no-underline">
+            Ver Feedbacks
+          </Link>
+          <Link to="/admin/users" className="px-4 py-2.5 bg-ember-500 text-white text-sm font-medium rounded-lg hover:bg-ember-400 transition-all shadow-lg shadow-ember-500/20 no-underline">
+            Gerenciar Usuarios
+          </Link>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-8">
         <div className="bg-forge-800 border border-forge-600 rounded-xl p-6 text-center">
           <div className="text-3xl font-bold text-text-primary">{stats.userCount}</div>
-          <div className="text-sm text-text-muted mt-1">Total de Usuários</div>
+          <div className="text-sm text-text-muted mt-1">Total de Usuarios</div>
         </div>
         <div className="bg-forge-800 border border-forge-600 rounded-xl p-6 text-center">
           <div className="text-3xl font-bold text-text-primary">{stats.cvCount}</div>
@@ -62,7 +68,11 @@ export default function AdminDashboardPage() {
         </div>
         <div className="bg-forge-800 border border-forge-600 rounded-xl p-6 text-center">
           <div className="text-3xl font-bold text-text-primary">{stats.activeSessionCount}</div>
-          <div className="text-sm text-text-muted mt-1">Sessões Ativas</div>
+          <div className="text-sm text-text-muted mt-1">Sessoes Ativas</div>
+        </div>
+        <div className="bg-forge-800 border border-forge-600 rounded-xl p-6 text-center">
+          <div className="text-3xl font-bold text-text-primary">{stats.feedbackCount}</div>
+          <div className="text-sm text-text-muted mt-1">Feedbacks</div>
         </div>
       </div>
 

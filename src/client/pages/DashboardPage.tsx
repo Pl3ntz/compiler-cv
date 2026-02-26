@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
-import { useNavigate } from 'react-router'
+import { useNavigate, Link } from 'react-router'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useAuth } from '../hooks/useAuth.js'
 import { LOCALE_LABELS, type Locale } from '@/lib/locales.js'
 import { TEMPLATES, isValidTemplateId } from '@/lib/templates.js'
+import FeedbackCard from '../components/FeedbackCard.js'
 
 interface CvListItem {
   id: string
@@ -30,6 +31,9 @@ export default function DashboardPage() {
   const [deletingId, setDeletingId] = useState<string | null>(null)
   const [cloningId, setCloningId] = useState<string | null>(null)
   const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const [feedbackDone, setFeedbackDone] = useState(() => {
+    try { return localStorage.getItem('cv_feedback_done') === '1' } catch { return false }
+  })
 
   useEffect(() => {
     fetch('/api/cv')
@@ -275,6 +279,26 @@ export default function DashboardPage() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Feedback + Support cards */}
+      {!feedbackDone && (
+        <div className="mb-4">
+          <FeedbackCard variant="card" onClose={() => setFeedbackDone(true)} />
+        </div>
+      )}
+
+      <div className="bg-forge-800 border border-forge-600 rounded-xl p-4 mb-4 flex items-center justify-between">
+        <div className="flex-1 min-w-0">
+          <span className="text-sm font-medium text-text-primary">Apoie o Compiler CV</span>
+          <span className="text-sm text-text-secondary ml-2">O projeto e open-source e gratuito.</span>
+        </div>
+        <Link
+          to="/apoie"
+          className="flex-shrink-0 ml-4 px-4 py-2 text-sm font-medium text-ember-400 border border-ember-500/30 rounded-lg hover:bg-ember-500/10 transition-all no-underline"
+        >
+          Apoiar
+        </Link>
+      </div>
 
       {/* Import overlay */}
       <AnimatePresence>

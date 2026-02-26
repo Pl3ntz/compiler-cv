@@ -1,6 +1,7 @@
 import type { Context, Next } from 'hono'
 import { auth } from '../lib/auth.js'
 import { checkRateLimit, rateLimitResponse } from '../lib/rate-limit.js'
+import { getClientIp } from '../lib/request-utils.js'
 
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? ''
 
@@ -14,15 +15,6 @@ const RATE_LIMITS: ReadonlyArray<{
   { prefix: '/api/auth/sign-up', methods: ['POST'], windowMs: 60_000, maxRequests: 5 },
   { prefix: '/api/cv/', methods: ['POST'], windowMs: 60_000, maxRequests: 20 },
 ]
-
-function getClientIp(request: Request): string {
-  const xff = request.headers.get('x-forwarded-for')
-  if (xff) {
-    const parts = xff.split(',').map(s => s.trim())
-    return parts[parts.length - 1]
-  }
-  return request.headers.get('x-real-ip') ?? 'unknown'
-}
 
 export async function rateLimitMiddleware(c: Context, next: Next) {
   const pathname = new URL(c.req.url).pathname

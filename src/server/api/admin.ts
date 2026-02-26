@@ -4,6 +4,7 @@ import { z } from 'zod'
 import { db } from '../../db/index.js'
 import { users, sessions } from '../../db/schema/users.js'
 import { cvs } from '../../db/schema/cvs.js'
+import { feedback } from '../../db/schema/feedback.js'
 
 const app = new Hono()
 
@@ -23,6 +24,10 @@ app.get('/stats', async (c) => {
       .from(sessions)
       .where(sql`${sessions.expiresAt} > now()`)
 
+    const [feedbackCount] = await db
+      .select({ count: sql<number>`count(*)::int` })
+      .from(feedback)
+
     const recentUsers = await db
       .select({
         id: users.id,
@@ -39,6 +44,7 @@ app.get('/stats', async (c) => {
       userCount: userCount.count,
       cvCount: cvCount.count,
       activeSessionCount: activeSessionCount.count,
+      feedbackCount: feedbackCount.count,
       recentUsers,
     })
   } catch (error) {
@@ -224,6 +230,89 @@ app.delete('/users/:userId', async (c) => {
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Falha ao excluir usuário'
     return c.json({ error: message }, 500)
+  }
+})
+
+// GET /feedback — list feedback with pagination and type filter
+app.get('/feedback', async (c) => {
+  try {
+    const page = Math.max(1, parseInt(c.req.query('page') ?? '1', 10))
+    const limit = Math.min(100, Math.max(1, parseInt(c.req.query('limit') ?? '20', 10)))
+    const offset = (page - 1) * limit
+    const typeFilter = c.req.query('type')
+
+    const whereClause = typeFilter && (typeFilter === 'user' || typeFilter === 'recruiter')
+      ? eq(feedback.type, typeFilter)
+      : undefined
+
+    const [totalRow] = await db
+      .select({ count: sql<number>`count(*)::int` })
+      .from(feedback)
+      .where(whereClause)
+
+    const rows = await db
+      .select({
+        id: feedback.id,
+        type: feedback.type,
+        rating: feedback.rating,
+        message: feedback.message,
+        contactEmail: feedback.contactEmail,
+        createdAt: feedback.createdAt,
+      })
+      .from(feedback)
+      .where(whereClause)
+      .orderBy(desc(feedback.createdAt))
+      .limit(limit)
+      .offset(offset)
+
+    const [avgRow] = await db
+      .select({ avg: sql<number>`round(avg(${feedback.rating}), 1)` })
+      .from(feedback)
+      .where(whereClause)
+
+    return c.json({
+      feedback: rows,
+      averageRating: avgRow.avg ?? 0,
+      meta: {
+        total: totalRow.count,
+        page,
+        limit,
+        totalPages: Math.ceil(totalRow.count / limit),
+      },
+    })
+  } catch (error) {
+    console.error('[admin] Failed to list feedback:', error)
+    return c.json({ error: 'Falha ao buscar feedbacks' }, 500)
+  }
+})
+
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+
+// DELETE /feedback/:id — delete feedback
+app.delete('/feedback/:id', async (c) => {
+  const id = c.req.param('id')
+
+  if (!UUID_RE.test(id)) {
+    return c.json({ error: 'ID invalido' }, 400)
+  }
+
+  try {
+    const [existing] = await db
+      .select({ id: feedback.id })
+      .from(feedback)
+      .where(eq(feedback.id, id))
+      .limit(1)
+
+    if (!existing) {
+      return c.json({ error: 'Feedback nao encontrado' }, 404)
+    }
+
+    await db.delete(feedback).where(eq(feedback.id, id))
+
+    return c.json({ success: true })
+  } catch (error) {
+    console.error('[admin] Failed to delete feedback:', error)
+    return c.json({ error: 'Falha ao excluir feedback' }, 500)
   }
 })
 

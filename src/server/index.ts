@@ -6,6 +6,7 @@ import healthRoutes from './api/health.js'
 import cvRoutes from './api/cv.js'
 import adminRoutes from './api/admin.js'
 import publicCvRoute from './api/public-cv.js'
+import feedbackRoutes from './api/feedback.js'
 
 const app = new Hono()
 
@@ -24,6 +25,9 @@ app.use('/api/*', rateLimitMiddleware)
 // Auth middleware for protected routes
 app.use('/api/cv/*', authMiddleware)
 app.use('/api/admin/*', adminMiddleware)
+
+// Public API routes (no auth required)
+app.route('/api/feedback', feedbackRoutes)
 
 // API routes
 app.route('/api/auth', authRoutes)

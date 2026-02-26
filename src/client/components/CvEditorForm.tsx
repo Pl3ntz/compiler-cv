@@ -5,6 +5,7 @@ import type { AtsScoreResponse } from '@/lib/zod-schemas/ats-score.js'
 import { getTranslations } from '@/lib/i18n/index.js'
 import { getFormDefaults } from '@/lib/form-defaults.js'
 import type { Locale } from '@/lib/locales.js'
+import FeedbackModal from './FeedbackModal.js'
 import HeaderForm from './HeaderForm.js'
 import SummaryForm from './SummaryForm.js'
 import EducationForm from './EducationForm.js'
@@ -171,8 +172,9 @@ export default function CvEditorForm({ initialData, cvId, locale, labels, locale
   const [latexLoading, setLatexLoading] = useState(false)
   const [latexPdfLoading, setLatexPdfLoading] = useState(false)
   const [atsDropdownOpen, setAtsDropdownOpen] = useState(false)
-  const [samplePreviewHtml, setSamplePreviewHtml] = useState('')
-  const [isShowingSample, setIsShowingSample] = useState(false)
+  const [ghostVisible, setGhostVisible] = useState(true)
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false)
+  const iframeRef = useRef<HTMLIFrameElement>(null)
 
   // Derive section order from data (with runtime safety)
   const rawOrder = data.sectionOrder as string[] | undefined
@@ -239,7 +241,8 @@ export default function CvEditorForm({ initialData, cvId, locale, labels, locale
     setPreviewError(false)
     setPreviewRefreshing(true)
     try {
-      const response = await fetch(`/api/cv/${cvId}/preview`, {
+      const ghostParam = ghostVisible ? '?ghost=1' : ''
+      const response = await fetch(`/api/cv/${cvId}/preview${ghostParam}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...cvData, locale: currentLocale }),
@@ -254,7 +257,7 @@ export default function CvEditorForm({ initialData, cvId, locale, labels, locale
     } finally {
       setPreviewRefreshing(false)
     }
-  }, [cvId, currentLocale])
+  }, [cvId, currentLocale, ghostVisible])
 
   const saveCv = useCallback(async (cvData: CvInput) => {
     lastSaveDataRef.current = cvData
@@ -300,6 +303,11 @@ export default function CvEditorForm({ initialData, cvId, locale, labels, locale
       a.download = `curriculo-${currentLocale}.pdf`
       a.click()
       URL.revokeObjectURL(url)
+
+      // Show feedback modal once after first successful download
+      if (!localStorage.getItem('cv_feedback_done')) {
+        setShowFeedbackModal(true)
+      }
     } catch {
       alert('Falha ao gerar PDF')
     } finally {
@@ -395,51 +403,6 @@ export default function CvEditorForm({ initialData, cvId, locale, labels, locale
     setLatexModalOpen(false)
   }, [data, latexSource])
 
-  // Detect if CV is empty (no meaningful content filled in)
-  const isCvEmpty = useCallback((d: CvInput): boolean => {
-    return !d.header.name && !d.summary.text
-      && d.education.items.length === 0
-      && d.experience.items.length === 0
-      && d.projects.items.length === 0
-      && d.skills.categories.length === 0
-      && d.languages.items.length === 0
-  }, [])
-
-  // Fetch sample preview HTML for empty CVs
-  useEffect(() => {
-    if (isCvEmpty(resolvedInitialData)) {
-      fetch(`/api/cv/sample-preview?locale=${currentLocale}`)
-        .then(res => res.ok ? res.text() : '')
-        .then(html => {
-          if (html) {
-            setSamplePreviewHtml(html)
-            setIsShowingSample(true)
-          }
-        })
-        .catch(() => {})
-    }
-  }, [isCvEmpty, resolvedInitialData, currentLocale])
-
-  // Show sample preview handler (for ATS "Ver exemplo ideal")
-  const showSamplePreview = useCallback(() => {
-    if (samplePreviewHtml) {
-      setIsShowingSample(true)
-    } else {
-      fetch(`/api/cv/sample-preview?locale=${currentLocale}`)
-        .then(res => res.ok ? res.text() : '')
-        .then(html => {
-          if (html) {
-            setSamplePreviewHtml(html)
-            setIsShowingSample(true)
-          }
-        })
-        .catch(() => {})
-    }
-  }, [samplePreviewHtml, currentLocale])
-
-  const dismissSamplePreview = useCallback(() => {
-    setIsShowingSample(false)
-  }, [])
 
   useEffect(() => {
     if (isInitialRef.current) {
@@ -455,11 +418,6 @@ export default function CvEditorForm({ initialData, cvId, locale, labels, locale
       return
     }
 
-    // When user types in any field, dismiss the sample preview
-    if (isShowingSample && !isCvEmpty(data)) {
-      setIsShowingSample(false)
-    }
-
     if (previewTimerRef.current) clearTimeout(previewTimerRef.current)
     previewTimerRef.current = setTimeout(() => fetchPreview(data), 300)
 
@@ -471,6 +429,24 @@ export default function CvEditorForm({ initialData, cvId, locale, labels, locale
       if (saveTimerRef.current) clearTimeout(saveTimerRef.current)
     }
   }, [data, currentLocale])
+
+  // Re-fetch preview when ghost visibility changes
+  useEffect(() => {
+    if (!isInitialRef.current) {
+      fetchPreview(data)
+    }
+  }, [ghostVisible])
+
+  // Post highlight message to iframe when active tab changes
+  useEffect(() => {
+    const iframe = iframeRef.current
+    if (iframe?.contentWindow) {
+      iframe.contentWindow.postMessage(
+        { type: 'highlight-section', section: activeTab },
+        '*',
+      )
+    }
+  }, [activeTab, previewHtml])
 
   const statusText = (): string => {
     switch (saveStatus) {
@@ -824,9 +800,9 @@ export default function CvEditorForm({ initialData, cvId, locale, labels, locale
                   <button
                     type="button"
                     className="w-full mt-1 px-3 py-2 text-xs font-medium text-ember-400 border border-ember-500/30 rounded-lg hover:bg-ember-500/10 transition-all cursor-pointer"
-                    onClick={() => { setAtsDropdownOpen(false); showSamplePreview() }}
+                    onClick={() => { setAtsDropdownOpen(false); setGhostVisible(!ghostVisible) }}
                   >
-                    Ver exemplo ideal
+                    {ghostVisible ? 'Ocultar exemplo' : 'Ver exemplo ideal'}
                   </button>
                 </div>
               </>
@@ -914,25 +890,7 @@ export default function CvEditorForm({ initialData, cvId, locale, labels, locale
         </div>
 
         <div className={`relative flex-[5] overflow-hidden bg-forge-800 flex flex-col items-center p-3 ${mobileView === 'form' ? 'hidden md:flex' : 'flex'}`}>
-          {isShowingSample && samplePreviewHtml ? (
-            <>
-              <button
-                type="button"
-                className="w-full max-w-[8in] mb-2 px-4 py-2 rounded-lg bg-ember-500/15 border border-ember-500/30 text-xs text-ember-400 text-center cursor-pointer hover:bg-ember-500/25 transition-colors flex-shrink-0"
-                onClick={dismissSamplePreview}
-              >
-                {isCvEmpty(data)
-                  ? 'Este é um exemplo de currículo. Preencha os campos para ver o seu.'
-                  : 'Exemplo de currículo com nota máxima. Clique para voltar ao seu.'}
-              </button>
-              <iframe
-                className="w-full max-w-[8in] flex-1 border border-forge-600 bg-white rounded"
-                srcDoc={samplePreviewHtml}
-                title="Exemplo de currículo"
-                sandbox="allow-same-origin"
-              />
-            </>
-          ) : previewError ? (
+          {previewError ? (
             <div className="flex flex-col items-center justify-center gap-3 h-full text-text-muted">
               <p>Erro ao carregar a visualização</p>
               <button type="button" className="px-3 py-2 text-sm font-medium text-text-secondary border border-forge-500 rounded-lg hover:bg-forge-700 transition-all" onClick={() => fetchPreview(data)}>
@@ -941,10 +899,11 @@ export default function CvEditorForm({ initialData, cvId, locale, labels, locale
             </div>
           ) : previewHtml ? (
             <iframe
+              ref={iframeRef}
               className={`w-full max-w-[8in] h-full border border-forge-600 bg-white rounded ${previewRefreshing ? 'opacity-50 transition-opacity' : ''}`}
               srcDoc={previewHtml}
               title="Visualização do currículo"
-              sandbox="allow-same-origin"
+              sandbox="allow-same-origin allow-scripts"
             />
           ) : (
             <div className="flex items-center justify-center text-text-muted h-full">
@@ -1038,6 +997,13 @@ export default function CvEditorForm({ initialData, cvId, locale, labels, locale
               </div>
             </motion.div>
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Feedback modal (shown once after PDF download) */}
+      <AnimatePresence>
+        {showFeedbackModal && (
+          <FeedbackModal onClose={() => setShowFeedbackModal(false)} />
         )}
       </AnimatePresence>
     </>
