@@ -11,7 +11,7 @@ import {
 } from '../../db/schema/index.js'
 import { cvInputSchema, cvCreateSchema } from '../../lib/zod-schemas/cv.js'
 import { cvRowsToCvData, cvInputToCvData } from '../../lib/cv-to-data.js'
-import { renderCvPreview } from '../../lib/preview-renderer.js'
+import { renderCvPreview, renderGhostPreview } from '../../lib/preview-renderer.js'
 import { loadCvById, getUserCvs } from '../../lib/load-cv.js'
 import { generatePdf, generatePdfFromCustomLatex } from '../../lib/pdf-generator.js'
 import { isValidUuid } from '../../lib/validation.js'
@@ -347,8 +347,31 @@ app.post('/:cvId/preview', async (c) => {
 
   const locale = (parsed.data.locale ?? 'en') as Locale
   const cvData = cvInputToCvData(parsed.data, locale, undefined, parsed.data.templateId)
-  const html = renderCvPreview(cvData)
 
+  const ghost = c.req.query('ghost') === '1'
+  if (ghost) {
+    try {
+      const filePath = resolve(process.cwd(), `data/cv.${locale}.yaml`)
+      const raw = readFileSync(filePath, 'utf-8')
+      const sampleParsed = parseYaml(raw) as CvData
+      const sampleData: CvData = {
+        ...sampleParsed,
+        meta: {
+          ...sampleParsed.meta,
+          templateId: sampleParsed.meta.templateId ?? 'jake',
+          locale,
+        },
+      }
+      const html = renderGhostPreview(cvData, sampleData)
+      return c.html(html)
+    } catch (error) {
+      console.error('[preview] Ghost mode failed, falling back:', error instanceof Error ? error.message : error)
+      const html = renderCvPreview(cvData)
+      return c.html(html)
+    }
+  }
+
+  const html = renderCvPreview(cvData)
   return c.html(html)
 })
 

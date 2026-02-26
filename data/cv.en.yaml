@@ -1,163 +1,98 @@
 meta:
   locale: en
-  pdfFilename: vitor-plentz-en
+  pdfFilename: ana-martins-en
 
 header:
-  name: Vitor Plentz
-  location: "Chapeco, Santa Catarina, Brazil"
-  phone: "+55 49 9 9153-9437"
-  email: vitorribasplentz@gmail.com
-  linkedin: linkedin.com/in/vitor-plentz
-  github: github.com/Pl3ntz
+  name: Ana Martins
+  location: "Sao Paulo, SP, Brazil"
+  phone: "+55 11 9 8765-4321"
+  email: ana.martins@email.com
+  linkedin: linkedin.com/in/ana-martins-mkt
+  github: github.com/anamartins
 
 summary:
   title: Professional Summary
   text: >
-    Full Stack PHP Developer with 3+ years of experience building scalable web applications and modernizing legacy systems.
-    Led development of multi-tenant logistics platform with AI-powered alert system reducing operational risk notifications by
-    60%. Expert in Laravel ecosystem, Docker containerization, PostgreSQL optimization, and API development. Proven track
-    record of refactoring legacy systems into modern architectures while maintaining 100% business continuity. Strong advocate
-    for clean code, automated testing, and CI/CD best practices. Experienced in designing RESTful APIs, building reactive UIs
-    with Vue.js, and implementing cloud-ready solutions for enterprise clients.
+    Marketing Manager with 7+ years of experience leading growth strategies for B2B and B2C companies
+    with budgets up to $400,000 annually. Delivered campaigns that generated a 35% increase in qualified lead
+    acquisition and 28% growth in recurring revenue. Specialized in digital marketing, branding, and
+    multidisciplinary team management.
 
 education:
   title: Education
   items:
-    - institution: Full Cycle
-      degree: Master of Business Administration in Software Architecture
-      date: "November 2023 -- Present"
-      location: Brazil
+    - institution: University of Sao Paulo (USP)
+      degree: Bachelor of Business Administration
+      date: "March 2013 -- December 2016"
+      location: "Sao Paulo, Brazil"
       highlights:
-        - "Software Development: Ability to develop large-scale applications"
-        - "Leadership: Skills in leading and delivering large-scale projects"
-        - "Architecture: Ability to design solutions for large enterprises"
-        - "DevOps and SRE Practices: Application of DevOps and Site Reliability Engineering practices"
-        - "Continuous Learning: Motivation to stay updated with market trends and evolve in development"
-    - institution: Universidade Cidade de Sao Paulo
-      degree: Bachelor of Technology in Systems Analysis and Development
-      date: "January 2021 -- December 2022"
-      location: Brazil
+        - Thesis on brand positioning strategies awarded departmental honors
+        - Organized the university Marketing Week for 2 consecutive years
+    - institution: ESPM
+      degree: Postgraduate Diploma in Digital Marketing
+      date: "March 2018 -- December 2018"
+      location: "Sao Paulo, Brazil"
       highlights:
-        - "Software Development: Ability to develop large-scale applications"
-        - "Software Architecture: Ability to design solutions for large enterprises"
-        - "Mobile Application Development: Ability to develop applications for mobile devices"
-        - "Data Modeling: Understanding of data structure representation for software applications"
-        - "Software Engineering: Principles and methodologies for effective software systems"
-        - "Internet Applications: Knowledge of web-based application development"
-        - "Information Security: Understanding of data protection and security"
-        - "Database Management: Knowledge of effective data storage and retrieval"
-        - "Network Management: Understanding of computer network maintenance"
+        - Capstone project on sales funnel automation applied to a real company with measured results
 
 experience:
   title: Experience
   items:
-    - company: Freelance - Self-employed
-      role: Full Stack PHP Developer
-      date: "November 2023 -- Present"
-      location: Brazil - Remote
+    - company: Grupo Horizonte
+      role: Marketing Manager
+      date: "February 2022 -- Present"
+      location: "Sao Paulo, Brazil - Hybrid"
       highlights:
-        - Led end-to-end development of enterprise logistics management SaaS platform serving 50+ clients with real-time fleet monitoring and AI-powered analytics
-        - Architected and implemented multi-tenant system in Laravel with PostgreSQL, ensuring complete data isolation and security compliance for enterprise clients
-        - Developed AI-powered alert system integrating ChatGPT API with WhatsApp, achieving 60% reduction in risk notification time and improving operational safety
-        - Built reactive dashboard with Vue.js and Inertia.js featuring advanced search, dynamic filters, and real-time data polling for enhanced user experience
-        - Orchestrated complete CI/CD pipeline automation using Docker and Laravel Sail, reducing deployment time by 70% and eliminating manual errors
-        - Designed and optimized PostgreSQL database schema supporting high-volume real-time data processing for fleet management operations
-        - Implemented comprehensive testing strategy with unit tests and integration tests, achieving 90% code coverage
-    - company: Brasilfone Telecom
-      role: Backend PHP Developer
-      date: "July 2023 -- April 2024"
-      location: "Chapeco, Santa Catarina, Brazil"
+        - Led team of 10 professionals including designers, copywriters, and analysts, delivering 40+ campaigns per quarter with an average 4.2% conversion rate
+        - Implemented inbound marketing strategy generating a 35% increase in qualified lead acquisition within 12 months
+        - Reduced customer acquisition cost (CAC) by 22% by restructuring paid media channels and optimizing audience segmentation
+        - Coordinated brand repositioning with new visual identity, resulting in an 18% increase in unaided brand awareness measured by NPS survey
+    - company: Pulso Digital Agency
+      role: Digital Marketing Coordinator
+      date: "January 2019 -- January 2022"
+      location: "Sao Paulo, Brazil"
       highlights:
-        - Engineered robust testing environments using Docker and Compose, integrating Asterisk and Kamailio for accurate telecommunications call simulations
-        - Successfully refactored legacy PHP (Symfony) monolithic system into flexible whitelabel solution, improving code maintainability by 40% and reducing deployment complexity
-        - Developed communication protocols and RESTful APIs streamlining data exchange between network devices and software systems
-        - Established coding standards and best practices across development team, improving code quality and reducing bug reports by 30%
-        - Collaborated on innovative product development, contributing to design and implementation of new telecommunications solutions
-        - Implemented automated testing pipeline reducing manual testing time by 50% and improving system reliability
-    - company: IXC Soft - Sistema de Gerenciamento para Provedores
-      role: Backend PHP Developer
-      date: "February 2022 -- July 2023"
-      location: "Chapeco, Santa Catarina, Brazil"
-      highlights:
-        - Developed innovative telecommunications management products serving multiple service providers with scalable architecture
-        - Maintained and enhanced enterprise software products, implementing critical bug fixes and performance improvements reducing system downtime by 50%
-        - Created technologies facilitating seamless communication between network equipment and software applications
-        - Collaborated with business analysts to translate complex requirements into technical solutions and system specifications
-        - Documented system changes and created comprehensive technical specifications for future development teams
-        - Optimized database queries and implemented caching strategies improving application performance by 35%
-    - company: "H&S Software"
-      role: COBOL/isCOBOL Developer
-      date: "August 2021 -- February 2022"
-      location: "Chapeco, Santa Catarina, Brazil"
-      highlights:
-        - Developed full-stack applications using isCOBOL, encompassing both user interface and backend business logic for enterprise systems
-        - Migrated legacy COBOL programs to isCOBOL platform, ensuring 100% business continuity while modernizing critical business processes
-        - Participated in analysis and establishment of coding standards and best practices for development teams
-        - Maintained and enhanced existing enterprise software products, implementing bug fixes and performance improvements
+        - Managed portfolios of 15+ clients simultaneously with a combined monthly paid media budget of $160,000
+        - Developed email marketing automation playbook increasing open rate by 42% and click-through rate by 28% for a 200,000-contact database
+        - Planned and executed 3 product launches generating $240,000 in revenue within the first 90 days
+        - Implemented agile methodology in the creative team reducing campaign delivery time from 15 to 7 business days
 
 projects:
   title: Projects
   items:
-    - name: Multi-Tenant Logistics Platform
-      tech: Laravel, Vue.js, Docker, PostgreSQL, ChatGPT API
-      date: "2023-2024"
-      highlights:
-        - End-to-end SaaS platform for logistics management and real-time fleet monitoring
-        - Multi-tenant architecture ensuring data isolation and security for each client
-        - AI-powered alert system integrating ChatGPT API with WhatsApp, reducing risk notification time by 60%
-        - Reactive dashboard with advanced search, dynamic filters, and real-time data polling
-        - Complete CI/CD pipeline automation for streamlined deployment process
-    - name: Legacy System Modernization
-      tech: PHP, Symfony, Docker, PostgreSQL
+    - name: "Horizonte+ Loyalty Program"
+      tech: Strategy, CRM, Automation, Analytics
       date: "2023"
       highlights:
-        - Refactored monolithic legacy system into modular, scalable microservices architecture
-        - Implemented containerization with Docker, reducing deployment complexity and improving environment consistency
-        - Integrated modern authentication and authorization systems while maintaining existing user data
-        - Improved code maintainability by 40% and reduced deployment time significantly
-    - name: Telecommunications Testing Environment
-      tech: Docker, Asterisk, Kamailio, PHP
-      date: "2023"
+        - Loyalty program reaching 50,000 active members within 6 months with a 78% retention rate
+        - Increased average order value by 25% among participating customers
+    - name: Brand Repositioning Campaign
+      tech: Branding, Market Research, Media, Events
+      date: "2022"
       highlights:
-        - Built robust testing environments using Docker and Compose for telecommunications systems
-        - Integrated Asterisk and Kamailio for accurate call simulations and testing
-        - Developed communication protocols for network device and software integration
-        - Created whitelabel solution improving maintainability and scalability
+        - Integrated campaign across 5 channels reaching 3 million impressions with engagement 2x above industry average
+        - Unaided brand awareness rose from 12% to 18% in a survey of 2,000 respondents
 
 skills:
-  title: Technical Skills
+  title: Skills
   categories:
-    - name: Programming Languages
-      values: PHP, JavaScript, SQL, Python, COBOL, isCOBOL
-    - name: Frameworks & Libraries
-      values: Laravel, Symfony, Vue.js, Inertia.js, Filament, Bootstrap, Tailwind CSS
-    - name: DevOps & Tools
-      values: Docker, Docker Compose, Git, GitLab, Jenkins, SonarQube, Nginx, Redis, RabbitMQ
-    - name: Databases
-      values: PostgreSQL, MySQL, SQLite
-    - name: Testing & Quality
-      values: PHPUnit, Automated Testing, Code Coverage, TDD
-    - name: API Development
-      values: RESTful APIs, GraphQL, API Design, Integration
-    - name: Cloud & Infrastructure
-      values: AWS, CI/CD, Containerization, Microservices
-    - name: AI & Integration
-      values: ChatGPT API, WhatsApp Business API, Third-party APIs
-    - name: Development Practices
-      values: Agile/Scrum, Clean Code, SOLID Principles, Performance Optimization
-    - name: Soft Skills
-      values: Leadership, Team Management, Problem-Solving, Adaptability, Continuous Learning, Client Communication
+    - name: Digital Marketing
+      values: Google Ads, Meta Ads, SEO/SEM, Email Marketing, Marketing Automation, Content Marketing
+    - name: Tools & Platforms
+      values: HubSpot, Google Analytics, Salesforce, Mailchimp, Hootsuite, Canva, Figma, Semrush
+    - name: Management & Strategy
+      values: Team Leadership, Strategic Planning, Budget Management, OKRs, Agile Methodology
+    - name: Analytics & Data
+      values: Advanced Excel, Power BI, Market Research, ROI Analysis, A/B Testing
+    - name: Communication
+      values: Storytelling, Executive Presentations, Vendor Negotiation, Copywriting
 
 languages:
   title: Languages
   items:
     - name: Portuguese
-      level: Native/Fluent
+      level: Native
     - name: English
-      level: Advanced (B2/C1)
+      level: Fluent (C1)
     - name: Spanish
-      level: Basic (A2)
-    - name: German
-      level: Basic (A1)
-    - name: French
-      level: Basic (A1)
+      level: Intermediate (B1)

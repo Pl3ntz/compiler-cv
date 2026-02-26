@@ -3,7 +3,7 @@ import Groq from 'groq-sdk'
 import { z } from 'zod'
 import { cvInputSchema, type CvInput } from './zod-schemas/cv.js'
 import { atsScoreResponseSchema, type AtsScoreResponse } from './zod-schemas/ats-score.js'
-import { runRuleBasedChecks, type RuleBasedResult, type SectionScore, type ValidationIssue } from './cv-validation/index.js'
+import { runRuleBasedChecks, type RuleBasedResult, type SectionScore, type ValidationIssue, type ValidationPositive } from './cv-validation/index.js'
 import type { Locale, SectionKey } from './cv-validation/types.js'
 
 const MODEL = 'llama-3.3-70b-versatile'
@@ -200,6 +200,17 @@ function collectSuggestions(result: RuleBasedResult) {
   }))
 }
 
+function collectPositives(result: RuleBasedResult) {
+  const all: ValidationPositive[] = []
+  for (const section of Object.values(result.sections)) {
+    all.push(...section.positives)
+  }
+  return all.map(p => ({
+    text: p.text,
+    section: p.section,
+  }))
+}
+
 // --- Main export ---
 
 export async function analyzeCvAtsScore(
@@ -218,9 +229,10 @@ export async function analyzeCvAtsScore(
   // 1. Rule-based checks (synchronous, deterministic, free)
   const ruleResult = runRuleBasedChecks(cvInput, loc)
 
-  // 2. Convert to categories and suggestions
+  // 2. Convert to categories, suggestions, and positives
   const categories = convertToCategories(ruleResult, loc)
   const suggestions = collectSuggestions(ruleResult)
+  const positives = collectPositives(ruleResult)
 
   // 3. LLM categorical grading (best-effort)
   const llmResult = await fetchLlmGrade(cvInput)
@@ -262,6 +274,7 @@ export async function analyzeCvAtsScore(
     overallScore,
     categories,
     suggestions,
+    positives,
     ruleScore: ruleResult.totalScore,
     llmGrade,
     breakdown,

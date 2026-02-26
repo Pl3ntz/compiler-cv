@@ -7,12 +7,14 @@ describe('checkExperience', () => {
     const result = checkExperience(makeFullCv(), 'en')
     expect(result.earned).toBeGreaterThanOrEqual(25)
     expect(result.max).toBe(30)
+    expect(result.positives.length).toBeGreaterThan(0)
   })
 
   it('gives only base points for empty experience', () => {
     const result = checkExperience(makeEmptyCv(), 'en')
     expect(result.earned).toBe(0)
     expect(result.issues.some(i => i.priority === 'critical')).toBe(true)
+    expect(result.positives).toHaveLength(0)
   })
 
   it('penalizes missing required fields', () => {
@@ -72,5 +74,11 @@ describe('checkExperience', () => {
     const result = checkExperience(cv, 'en')
     // Should score high on quantification
     expect(result.earned).toBeGreaterThanOrEqual(20)
+  })
+
+  it('returns positives in Portuguese when locale is pt', () => {
+    const cv = makeFullCv()
+    const result = checkExperience(cv, 'pt')
+    expect(result.positives.some(p => p.text === 'Seção de experiência preenchida')).toBe(true)
   })
 })

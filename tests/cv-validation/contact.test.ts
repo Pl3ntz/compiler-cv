@@ -8,6 +8,7 @@ describe('checkContact', () => {
     expect(result.earned).toBe(10)
     expect(result.max).toBe(10)
     expect(result.issues).toHaveLength(0)
+    expect(result.positives.length).toBeGreaterThan(0)
   })
 
   it('gives 0 for empty contact info', () => {
@@ -16,6 +17,7 @@ describe('checkContact', () => {
     expect(result.max).toBe(10)
     expect(result.issues.length).toBeGreaterThan(0)
     expect(result.issues.some(i => i.priority === 'critical')).toBe(true)
+    expect(result.positives).toHaveLength(0)
   })
 
   it('validates email format', () => {
@@ -50,5 +52,18 @@ describe('checkContact', () => {
     const result = checkContact(cv, 'en')
     expect(result.earned).toBe(9) // missing 1 pt
     expect(result.issues.some(i => i.text.includes('Location') && i.priority === 'optional')).toBe(true)
+  })
+
+  it('returns messages in Portuguese when locale is pt', () => {
+    const result = checkContact(makeFullCv(), 'pt')
+    expect(result.earned).toBe(10)
+    expect(result.positives.some(p => p.text === 'Nome preenchido')).toBe(true)
+    expect(result.positives.some(p => p.text === 'E-mail válido')).toBe(true)
+  })
+
+  it('returns messages in English when locale is en', () => {
+    const result = checkContact(makeFullCv(), 'en')
+    expect(result.positives.some(p => p.text === 'Name is present')).toBe(true)
+    expect(result.positives.some(p => p.text === 'Valid email address')).toBe(true)
   })
 })

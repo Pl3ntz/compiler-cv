@@ -9,10 +9,16 @@ export interface ValidationIssue {
   section: SectionKey
 }
 
+export interface ValidationPositive {
+  text: string
+  section: SectionKey
+}
+
 export interface SectionScore {
   earned: number
   max: number
   issues: ValidationIssue[]
+  positives: ValidationPositive[]
 }
 
 export interface RuleBasedResult {

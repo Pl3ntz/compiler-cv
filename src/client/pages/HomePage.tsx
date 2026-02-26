@@ -48,6 +48,7 @@ export default function HomePage() {
           <div className="hidden sm:flex items-center gap-6 text-sm text-text-secondary">
             <a href="#features" className="hover:text-text-primary transition-colors no-underline">Recursos</a>
             <a href="#how-it-works" className="hover:text-text-primary transition-colors no-underline">Como Funciona</a>
+            <Link to="/analise-ats" className="hover:text-text-primary transition-colors no-underline">Analise ATS</Link>
             <a href="#highlights" className="hover:text-text-primary transition-colors no-underline">Diferenciais</a>
           </div>
 
@@ -243,6 +244,139 @@ export default function HomePage() {
         </div>
       </Section>
 
+      {/* ━━ ATS EVALUATION ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
+      <Section id="ats-evaluation" className="max-w-6xl mx-auto px-5 sm:px-8 py-24">
+        <motion.div variants={fadeUp} transition={{ duration: 0.4 }} className="text-center mb-14">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-3">Como avaliamos seu curriculo</h2>
+          <p className="text-text-secondary max-w-xl mx-auto">9 criterios analisados automaticamente, somando 100 pontos.</p>
+        </motion.div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {[
+            {
+              icon: (
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                </svg>
+              ),
+              name: 'Contato',
+              points: 10,
+              desc: 'Nome, e-mail, telefone, LinkedIn e localizacao.',
+            },
+            {
+              icon: (
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12" />
+                </svg>
+              ),
+              name: 'Resumo',
+              points: 10,
+              desc: 'Presente, 2-5 frases, sem pronomes em 1a pessoa.',
+            },
+            {
+              icon: (
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 00.75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 00-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0112 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 01-.673-.38m0 0A2.18 2.18 0 013 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 013.413-.387m7.5 0V5.25A2.25 2.25 0 0013.5 3h-3a2.25 2.25 0 00-2.25 2.25v.894m7.5 0a48.667 48.667 0 00-7.5 0M12 12.75h.008v.008H12v-.008z" />
+                </svg>
+              ),
+              name: 'Experiencia',
+              points: 30,
+              desc: 'Verbos de acao, metricas quantificadas, 3-6 bullets.',
+            },
+            {
+              icon: (
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5" />
+                </svg>
+              ),
+              name: 'Formacao',
+              points: 8,
+              desc: 'Instituicao, grau e datas presentes.',
+            },
+            {
+              icon: (
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456z" />
+                </svg>
+              ),
+              name: 'Habilidades',
+              points: 12,
+              desc: '2+ categorias com 8+ skills no total.',
+            },
+            {
+              icon: (
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" />
+                </svg>
+              ),
+              name: 'Formatacao',
+              points: 15,
+              desc: 'Tamanho ideal, datas ATS-safe, sem bullets vazios.',
+            },
+            {
+              icon: (
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+                </svg>
+              ),
+              name: 'Continuidade',
+              points: 5,
+              desc: 'Datas parseaveis e sem lacunas grandes.',
+            },
+            {
+              icon: (
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" />
+                </svg>
+              ),
+              name: 'Projetos',
+              points: 5,
+              desc: 'Nome e highlights de projetos relevantes.',
+            },
+            {
+              icon: (
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 21l5.25-11.25L21 21m-9-3h7.5M3 5.621a48.474 48.474 0 016-.371m0 0c1.12 0 2.233.038 3.334.114M9 5.25V3m3.334 2.364C11.176 10.658 7.69 15.08 3 17.502m9.334-12.138c.896.061 1.785.147 2.666.257m-4.589 8.495a18.023 18.023 0 01-3.827-5.802" />
+                </svg>
+              ),
+              name: 'Idiomas',
+              points: 5,
+              desc: 'Nome e nivel de proficiencia de cada idioma.',
+            },
+          ].map((item) => (
+            <motion.div
+              key={item.name}
+              variants={fadeUp}
+              transition={{ duration: 0.4 }}
+              className="bg-forge-800/60 border border-forge-600/50 rounded-2xl p-5 hover:border-molten-500/20 transition-colors"
+            >
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-9 h-9 rounded-lg bg-ember-500/10 flex items-center justify-center text-ember-400 flex-shrink-0">
+                  {item.icon}
+                </div>
+                <h3 className="text-sm font-semibold text-text-primary">{item.name}</h3>
+                <span className="ml-auto inline-flex items-center px-2 py-0.5 rounded-full bg-ember-500/15 text-ember-400 text-xs font-semibold">
+                  {item.points} pts
+                </span>
+              </div>
+              <p className="text-sm text-text-secondary leading-relaxed">{item.desc}</p>
+            </motion.div>
+          ))}
+        </div>
+
+        <motion.div variants={fadeUp} transition={{ duration: 0.4 }} className="text-center mt-10">
+          <Link
+            to="/analise-ats"
+            className="group inline-flex items-center px-6 py-3 text-sm font-semibold text-ember-400 border border-ember-500/30 rounded-xl hover:bg-ember-500/10 transition-all no-underline"
+          >
+            Ver detalhes completos
+            <svg className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+            </svg>
+          </Link>
+        </motion.div>
+      </Section>
+
       {/* ━━ HIGHLIGHTS / DIFFERENTIALS ━━━━━━━━━━━━━━━━━━━━ */}
       <Section id="highlights" className="max-w-6xl mx-auto px-5 sm:px-8 py-24">
         <motion.div variants={fadeUp} transition={{ duration: 0.4 }} className="text-center mb-14">
@@ -365,6 +499,7 @@ export default function HomePage() {
               <ul className="space-y-2 text-sm">
                 <li><a href="#features" className="text-text-secondary hover:text-text-primary transition-colors no-underline">Recursos</a></li>
                 <li><a href="#how-it-works" className="text-text-secondary hover:text-text-primary transition-colors no-underline">Como Funciona</a></li>
+                <li><Link to="/analise-ats" className="text-text-secondary hover:text-text-primary transition-colors no-underline">Analise ATS</Link></li>
                 <li><a href="#highlights" className="text-text-secondary hover:text-text-primary transition-colors no-underline">Diferenciais</a></li>
               </ul>
             </div>

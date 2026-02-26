@@ -26,4 +26,4 @@ export function runRuleBasedChecks(cv: CvInput, locale: Locale): RuleBasedResult
   return { totalScore, maxScore: 100, sections }
 }
 
-export type { RuleBasedResult, SectionScore, ValidationIssue, Locale, Priority, SectionKey } from './types.js'
+export type { RuleBasedResult, SectionScore, ValidationIssue, ValidationPositive, Locale, Priority, SectionKey } from './types.js'

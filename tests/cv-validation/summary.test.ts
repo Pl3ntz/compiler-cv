@@ -8,12 +8,14 @@ describe('checkSummary', () => {
     expect(result.earned).toBe(10)
     expect(result.max).toBe(10)
     expect(result.issues).toHaveLength(0)
+    expect(result.positives.length).toBeGreaterThan(0)
   })
 
   it('gives 0 for empty summary', () => {
     const result = checkSummary(makeEmptyCv(), 'en')
     expect(result.earned).toBe(0)
     expect(result.issues.some(i => i.priority === 'critical')).toBe(true)
+    expect(result.positives).toHaveLength(0)
   })
 
   it('penalizes single-sentence summary', () => {
@@ -45,6 +47,12 @@ describe('checkSummary', () => {
     const cv = makeFullCv()
     cv.summary.text = 'Eu sou um engenheiro de software. Minha experiencia abrange 8 anos. Trabalho com tecnologia.'
     const result = checkSummary(cv, 'pt')
-    expect(result.issues.some(i => i.text.includes('pronouns'))).toBe(true)
+    expect(result.issues.some(i => i.text.includes('pronomes'))).toBe(true)
+  })
+
+  it('returns positives in Portuguese when locale is pt', () => {
+    const cv = makeFullCv()
+    const result = checkSummary(cv, 'pt')
+    expect(result.positives.some(p => p.text === 'Resumo profissional preenchido')).toBe(true)
   })
 })

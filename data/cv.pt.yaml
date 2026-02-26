@@ -1,164 +1,98 @@
 meta:
   locale: pt
-  pdfFilename: vitor-plentz-pt
+  pdfFilename: ana-martins-pt
 
 header:
-  name: Vitor Plentz
-  location: "Chapeco, Santa Catarina, Brasil"
-  phone: "+55 49 9 9153-9437"
-  email: vitorribasplentz@gmail.com
-  linkedin: linkedin.com/in/vitor-plentz
-  github: github.com/Pl3ntz
+  name: Ana Martins
+  location: "Sao Paulo, SP, Brasil"
+  phone: "+55 11 9 8765-4321"
+  email: ana.martins@email.com
+  linkedin: linkedin.com/in/ana-martins-mkt
+  github: github.com/anamartins
 
 summary:
   title: Resumo Profissional
   text: >
-    Desenvolvedor Full Stack PHP com 3+ anos de experiencia construindo aplicacoes web escalaveis e modernizando sistemas
-    legados. Liderei o desenvolvimento de plataforma SaaS multi-tenant para logistica com sistema de alertas inteligente
-    reduzindo notificacoes de risco operacional em 60%. Sou especialista em ecossistema Laravel, containerizacao Docker,
-    otimizacao PostgreSQL e desenvolvimento de APIs. Possuo historico comprovado de refatoracao de sistemas legados em
-    arquiteturas modernas mantendo 100% de continuidade do negocio. Sou forte defensor de codigo limpo, testes
-    automatizados e melhores praticas de CI/CD. Tenho experiencia em projetar APIs RESTful, construir interfaces reativas
-    com Vue.js e implementar solucoes prontas para nuvem para clientes empresariais.
+    Gerente de Marketing com 7+ anos de experiencia liderando estrategias de crescimento para empresas B2B e B2C
+    com orcamentos de ate R$2 milhoes anuais. Responsavel por campanhas que geraram aumento de 35% na captacao de leads
+    qualificados e 28% de crescimento em receita recorrente. Especialista em marketing digital, branding e gestao de
+    equipes multidisciplinares.
 
 education:
   title: Formacao Academica
   items:
-    - institution: Full Cycle
-      degree: MBA em Arquitetura de Software
-      date: "Novembro 2023 -- Incompleto"
-      location: Brasil
+    - institution: Universidade de Sao Paulo (USP)
+      degree: Bacharelado em Administracao de Empresas
+      date: "Marco 2013 -- Dezembro 2016"
+      location: "Sao Paulo, Brasil"
       highlights:
-        - "Desenvolvimento de Software: Capacidade de desenvolver aplicacoes de grande escala"
-        - "Lideranca: Habilidades em liderar e entregar projetos de grande escala"
-        - "Arquitetura: Capacidade de projetar solucoes para grandes empresas"
-        - "Praticas DevOps e SRE: Aplicacao de praticas de DevOps e Site Reliability Engineering"
-        - "Aprendizado Continuo: Motivacao para se manter atualizado com tendencias do mercado e evoluir no desenvolvimento"
-    - institution: Universidade Cidade de Sao Paulo
-      degree: Tecnologo em Analise e Desenvolvimento de Sistemas
-      date: "Janeiro 2021 -- Dezembro 2022"
-      location: Brasil
+        - Trabalho de conclusao sobre estrategias de posicionamento de marca premiado pelo departamento
+        - Organizacao da Semana de Marketing da universidade por 2 anos consecutivos
+    - institution: ESPM
+      degree: Pos-Graduacao em Marketing Digital
+      date: "Marco 2018 -- Dezembro 2018"
+      location: "Sao Paulo, Brasil"
       highlights:
-        - "Desenvolvimento de Software: Capacidade de desenvolver aplicacoes de grande escala"
-        - "Arquitetura de Software: Capacidade de projetar solucoes para grandes empresas"
-        - "Desenvolvimento de Aplicacoes Moveis: Capacidade de desenvolver aplicacoes para dispositivos moveis"
-        - "Modelagem de Dados: Compreensao da representacao de estrutura de dados para aplicacoes de software"
-        - "Engenharia de Software: Principios e metodologias para sistemas de software eficazes"
-        - "Aplicacoes para Internet: Conhecimento de desenvolvimento de aplicacoes baseadas na web"
-        - "Seguranca da Informacao: Compreensao de protecao e seguranca de dados"
-        - "Gerenciamento de Banco de Dados: Conhecimento de armazenamento e recuperacao eficaz de dados"
-        - "Gerenciamento de Redes: Compreensao da manutencao de redes de computadores"
+        - Projeto final sobre automacao de funil de vendas aplicado em empresa real com resultados mensurados
 
 experience:
   title: Experiencia Profissional
   items:
-    - company: Freelance - Autonomo
-      role: Desenvolvedor Full Stack PHP
-      date: "Novembro 2023 -- Presente"
-      location: Brasil - Remoto
+    - company: Grupo Horizonte
+      role: Gerente de Marketing
+      date: "Fevereiro 2022 -- Presente"
+      location: "Sao Paulo, Brasil - Hibrido"
       highlights:
-        - Liderei desenvolvimento completo de plataforma SaaS de gestao logistica empresarial atendendo 50+ clientes com monitoramento de frota em tempo real e analise inteligente
-        - Projetei e implementei sistema multi-tenant em Laravel com PostgreSQL, garantindo isolamento completo de dados e conformidade de seguranca para clientes empresariais
-        - Desenvolvi sistema de alertas inteligente integrando API ChatGPT com WhatsApp, alcancando 60% de reducao no tempo de notificacao de riscos e melhorando seguranca operacional
-        - Construi dashboard reativo com Vue.js e Inertia.js com busca avancada, filtros dinamicos e consulta periodica de dados em tempo real para melhor experiencia do usuario
-        - Orquestrei automacao completa de pipeline CI/CD usando Docker e Laravel Sail, reduzindo tempo de implantacao em 70% e eliminando erros manuais
-        - Projetei e otimizei esquema de banco PostgreSQL suportando processamento de dados em tempo real de alto volume para operacoes de gestao de frota
-        - Implementei estrategia abrangente de testes com testes unitarios e de integracao, alcancando 90% de cobertura de codigo
-    - company: Brasilfone Telecom
-      role: Desenvolvedor Backend PHP
-      date: "Julho 2023 -- Abril 2024"
-      location: "Chapeco, Santa Catarina, Brasil"
+        - Liderou equipe de 10 profissionais entre designers, redatores e analistas, entregando 40+ campanhas por trimestre com taxa de conversao media de 4.2%
+        - Implementou estrategia de inbound marketing gerando aumento de 35% na captacao de leads qualificados em 12 meses
+        - Reduziu custo de aquisicao de cliente (CAC) em 22% ao reestruturar canais de midia paga e otimizar segmentacao de publico
+        - Coordenou reposicionamento da marca com novo branding visual, resultando em aumento de 18% no reconhecimento espontaneo medido por pesquisa NPS
+    - company: Agencia Pulso Digital
+      role: Coordenadora de Marketing Digital
+      date: "Janeiro 2019 -- Janeiro 2022"
+      location: "Sao Paulo, Brasil"
       highlights:
-        - Projetei ambientes robustos de testes usando Docker e Compose, integrando Asterisk e Kamailio para simulacoes precisas de chamadas de telecomunicacoes
-        - Refatorei com sucesso sistema monolitico legado PHP (Symfony) em solucao whitelabel flexivel, melhorando manutenibilidade do codigo em 40% e reduzindo complexidade de implantacao
-        - Desenvolvi protocolos de comunicacao e APIs RESTful otimizando troca de dados entre dispositivos de rede e sistemas de software
-        - Estabeleci padroes de codigo e melhores praticas em toda a equipe de desenvolvimento, melhorando qualidade do codigo e reduzindo relatorios de falhas em 30%
-        - Colaborei no desenvolvimento inovador de produtos, contribuindo para design e implementacao de novas solucoes de telecomunicacoes
-        - Implementei pipeline de testes automatizados reduzindo tempo de testes manuais em 50% e melhorando confiabilidade do sistema
-    - company: IXC Soft - Sistema de Gerenciamento para Provedores
-      role: Desenvolvedor Backend PHP
-      date: "Fevereiro 2022 -- Julho 2023"
-      location: "Chapeco, Santa Catarina, Brasil"
-      highlights:
-        - Desenvolvi produtos inovadores de gestao de telecomunicacoes atendendo multiplos provedores de servico com arquitetura escalavel
-        - Mantive e aprimorei produtos de software empresarial, implementando correcoes criticas de falhas e melhorias de desempenho reduzindo tempo de inatividade do sistema em 50%
-        - Criei tecnologias facilitando comunicacao perfeita entre equipamentos de rede e aplicacoes de software
-        - Colaborei com analistas de negocio para traduzir requisitos complexos em solucoes tecnicas e especificacoes de sistema
-        - Documentei mudancas de sistema e criei especificacoes tecnicas abrangentes para futuras equipes de desenvolvimento
-        - Otimizei consultas de banco de dados e implementei estrategias de cache melhorando desempenho da aplicacao em 35%
-    - company: "H&S Software"
-      role: Desenvolvedor COBOL/isCOBOL
-      date: "Agosto 2021 -- Fevereiro 2022"
-      location: "Chapeco, Santa Catarina, Brasil"
-      highlights:
-        - Desenvolvi aplicacoes full-stack usando isCOBOL, abrangendo tanto interface do usuario quanto logica de negocio backend para sistemas empresariais
-        - Migrei programas COBOL legados para plataforma isCOBOL, garantindo 100% de continuidade do negocio enquanto modernizava processos criticos da empresa
-        - Participei da analise e estabelecimento de padroes de codigo e melhores praticas para equipes de desenvolvimento
-        - Mantive e aprimorei produtos de software empresarial existentes, implementando correcoes de falhas e melhorias de desempenho
+        - Gerenciou portfolios de 15+ clientes simultaneamente com orcamento combinado de R$800.000 mensais em midia paga
+        - Desenvolveu playbook de automacao de e-mail marketing aumentando taxa de abertura em 42% e taxa de clique em 28% para base de 200.000 contatos
+        - Planejou e executou 3 lancamentos de produto gerando R$1.2 milhao em receita nos primeiros 90 dias
+        - Implantou metodologia agil na equipe de criacao reduzindo tempo de entrega de campanhas de 15 para 7 dias uteis
 
 projects:
   title: Projetos Principais
   items:
-    - name: Plataforma Logistica Multi-Tenant
-      tech: Laravel, Vue.js, Docker, PostgreSQL, API ChatGPT
-      date: "2023-2024"
-      highlights:
-        - Plataforma SaaS end-to-end para gestao logistica e monitoramento de frota em tempo real
-        - Arquitetura multi-tenant garantindo isolamento de dados e seguranca para cada cliente
-        - Sistema de alertas inteligente integrando API ChatGPT com WhatsApp, reduzindo tempo de notificacao de riscos em 60%
-        - Dashboard reativo com busca avancada, filtros dinamicos e polling de dados em tempo real
-        - Automacao completa de pipeline CI/CD para processo de implantacao otimizado
-    - name: Modernizacao de Sistema Legado
-      tech: PHP, Symfony, Docker, PostgreSQL
+    - name: "Programa de Fidelidade Horizonte+"
+      tech: Estrategia, CRM, Automacao, Analytics
       date: "2023"
       highlights:
-        - Refatorei sistema monolitico legado em arquitetura de microsservicos modular e escalavel
-        - Implementei containerizacao com Docker, reduzindo complexidade de implantacao e melhorando consistencia de ambiente
-        - Integrei sistemas modernos de autenticacao e autorizacao mantendo dados de usuario existentes
-        - Melhorei manutenibilidade do codigo em 40% e reduzi significativamente tempo de implantacao
-    - name: Ambiente de Testes de Telecomunicacoes
-      tech: Docker, Asterisk, Kamailio, PHP
-      date: "2023"
+        - Programa de fidelizacao atingindo 50.000 membros ativos em 6 meses com taxa de retencao de 78%
+        - Aumento de 25% no ticket medio entre clientes participantes do programa
+    - name: Campanha de Reposicionamento de Marca
+      tech: Branding, Pesquisa de Mercado, Midia, Eventos
+      date: "2022"
       highlights:
-        - Construi ambientes robustos de testes usando Docker e Compose para sistemas de telecomunicacoes
-        - Integrei Asterisk e Kamailio para simulacoes precisas de chamadas e testes
-        - Desenvolvi protocolos de comunicacao para integracao de dispositivos de rede e software
-        - Criei solucao whitelabel melhorando manutenibilidade e escalabilidade
+        - Campanha integrada em 5 canais atingindo 3 milhoes de impressoes com engajamento 2x acima da media do setor
+        - Reconhecimento espontaneo da marca subiu de 12% para 18% em pesquisa com 2.000 respondentes
 
 skills:
-  title: Habilidades Tecnicas
+  title: Habilidades
   categories:
-    - name: Linguagens de Programacao
-      values: PHP, JavaScript, SQL, Python, COBOL, isCOBOL
-    - name: Frameworks & Bibliotecas
-      values: Laravel, Symfony, Vue.js, Inertia.js, Filament, Bootstrap, Tailwind CSS
-    - name: DevOps & Ferramentas
-      values: Docker, Docker Compose, Git, GitLab, Jenkins, SonarQube, Nginx, Redis, RabbitMQ
-    - name: Bancos de Dados
-      values: PostgreSQL, MySQL, SQLite
-    - name: Testes & Qualidade
-      values: PHPUnit, Testes Automatizados, Cobertura de Codigo, TDD
-    - name: Desenvolvimento de APIs
-      values: APIs RESTful, GraphQL, Design de APIs, Integracao
-    - name: Cloud & Infraestrutura
-      values: AWS, CI/CD, Containerizacao, Microsservicos
-    - name: IA & Integracao
-      values: API ChatGPT, WhatsApp Business API, APIs de Terceiros
-    - name: Praticas de Desenvolvimento
-      values: Agile/Scrum, Codigo Limpo, Principios SOLID, Otimizacao de Performance
-    - name: Soft Skills
-      values: Lideranca, Gestao de Equipes, Resolucao de Problemas, Adaptabilidade, Aprendizado Continuo, Comunicacao com Clientes
+    - name: Marketing Digital
+      values: Google Ads, Meta Ads, SEO/SEM, E-mail Marketing, Automacao de Marketing, Content Marketing
+    - name: Ferramentas & Plataformas
+      values: HubSpot, Google Analytics, Salesforce, RD Station, Mailchimp, Hootsuite, Canva, Figma
+    - name: Gestao & Estrategia
+      values: Gestao de Equipes, Planejamento Estrategico, Gestao de Orcamento, OKRs, Metodologia Agil
+    - name: Analise & Dados
+      values: Excel Avancado, Power BI, Pesquisa de Mercado, Analise de ROI, Testes A/B
+    - name: Comunicacao
+      values: Storytelling, Apresentacoes Executivas, Negociacao com Fornecedores, Redacao Publicitaria
 
 languages:
   title: Idiomas
   items:
     - name: Portugues
-      level: Nativo/Fluente
+      level: Nativo
     - name: Ingles
-      level: Avancado (B2/C1)
+      level: Fluente (C1)
     - name: Espanhol
-      level: Basico (A2)
-    - name: Alemao
-      level: Basico (A1)
-    - name: Frances
-      level: Basico (A1)
+      level: Intermediario (B1)

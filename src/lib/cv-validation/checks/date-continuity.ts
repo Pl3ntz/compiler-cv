@@ -1,5 +1,6 @@
 import type { CvInput } from '../../zod-schemas/cv.js'
-import type { Locale, SectionScore, ValidationIssue } from '../types.js'
+import type { Locale, SectionScore, ValidationIssue, ValidationPositive } from '../types.js'
+import { msg } from '../messages.js'
 
 const MAX = 5
 
@@ -78,13 +79,14 @@ function parseDateRange(dateStr: string): DateRange | null {
   return null
 }
 
-export function checkDateContinuity(cv: CvInput, _locale: Locale): SectionScore {
+export function checkDateContinuity(cv: CvInput, locale: Locale): SectionScore {
   const items = cv.experience.items
   let earned = 0
   const issues: ValidationIssue[] = []
+  const positives: ValidationPositive[] = []
 
   if (items.length === 0) {
-    return { earned: MAX, max: MAX, issues } // no experience = no penalty
+    return { earned: MAX, max: MAX, issues, positives } // no experience = no penalty
   }
 
   // Parse all date ranges
@@ -103,15 +105,16 @@ export function checkDateContinuity(cv: CvInput, _locale: Locale): SectionScore 
 
   // If we can't parse any dates, give full credit (don't penalize)
   if (ranges.length === 0) {
-    return { earned: MAX, max: MAX, issues }
+    return { earned: MAX, max: MAX, issues, positives }
   }
 
   // Dates are parseable (2 pts)
   if (unparseable === 0) {
     earned += 2
+    positives.push({ text: msg(locale, 'dateContinuity.dates_parseable'), section: 'experience' })
   } else {
     earned += 1
-    issues.push({ text: `${unparseable} date(s) could not be parsed for gap analysis`, priority: 'optional', section: 'experience' })
+    issues.push({ text: msg(locale, 'dateContinuity.some_unparseable', { count: unparseable }), priority: 'optional', section: 'experience' })
   }
 
   // Check for gaps > 6 months (3 pts)
@@ -129,12 +132,13 @@ export function checkDateContinuity(cv: CvInput, _locale: Locale): SectionScore 
 
     if (!hasLargeGap) {
       earned += 3
+      positives.push({ text: msg(locale, 'dateContinuity.no_gaps'), section: 'experience' })
     } else {
-      issues.push({ text: 'Employment gap longer than 6 months detected — consider addressing it', priority: 'optional', section: 'experience' })
+      issues.push({ text: msg(locale, 'dateContinuity.has_gaps'), priority: 'optional', section: 'experience' })
     }
   } else {
     earned += 3 // single job, no gap possible
   }
 
-  return { earned, max: MAX, issues }
+  return { earned, max: MAX, issues, positives }
 }

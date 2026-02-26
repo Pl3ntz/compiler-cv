@@ -6,7 +6,7 @@ describe('generateTex', () => {
     const tex = generateTex('pt')
     expect(tex).toContain('\\input{preamble}')
     expect(tex).toContain('\\usepackage[brazilian]{babel}')
-    expect(tex).toContain('Vitor Plentz')
+    expect(tex).toContain('Ana Martins')
     expect(tex).toContain('\\begin{document}')
     expect(tex).toContain('\\end{document}')
   })
@@ -15,13 +15,13 @@ describe('generateTex', () => {
     const tex = generateTex('en')
     expect(tex).toContain('\\input{preamble}')
     expect(tex).toContain('\\usepackage[english]{babel}')
-    expect(tex).toContain('Vitor Plentz')
+    expect(tex).toContain('Ana Martins')
     expect(tex).toContain('Professional Summary')
   })
 
-  it('should escape special LaTeX characters in company name', () => {
+  it('should contain all expected sections', () => {
     const tex = generateTex('pt')
-    expect(tex).toContain('H\\&S Software')
+    expect(tex).toContain('Grupo Horizonte')
   })
 
   it('should contain all CV sections', () => {

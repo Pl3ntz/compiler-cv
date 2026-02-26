@@ -11,8 +11,10 @@ function escapeHtml(text: string): string {
     .replace(/"/g, '&quot;')
 }
 
-function renderHeader(header: CvData['header']): string {
-  return `<header class="cv-header">
+function renderHeader(header: CvData['header'], cssClass = '', sectionId = ''): string {
+  const dataAttr = sectionId ? ` data-section="${escapeHtml(sectionId)}"` : ''
+  const cls = cssClass ? ` ${cssClass}` : ''
+  return `<header class="cv-header${cls}"${dataAttr}>
   <h1>${escapeHtml(header.name)}</h1>
   <div class="location">${escapeHtml(header.location)}</div>
   <div class="contacts">
@@ -27,17 +29,21 @@ function renderHeader(header: CvData['header']): string {
 </header>`
 }
 
-function renderSection(title: string, content: string): string {
-  return `<section class="cv-section">
+function renderSection(title: string, content: string, sectionId = '', cssClass = ''): string {
+  const dataAttr = sectionId ? ` data-section="${escapeHtml(sectionId)}"` : ''
+  const cls = cssClass ? ` ${cssClass}` : ''
+  return `<section class="cv-section${cls}"${dataAttr}>
   <h2>${escapeHtml(title)}</h2>
   ${content}
 </section>`
 }
 
-function renderSummary(summary: CvData['summary']): string {
+function renderSummary(summary: CvData['summary'], sectionId = '', cssClass = ''): string {
   return renderSection(
     summary.title,
     `<div class="cv-summary"><p>${escapeHtml(summary.text)}</p></div>`,
+    sectionId,
+    cssClass,
   )
 }
 
@@ -47,7 +53,7 @@ function renderHighlights(highlights: readonly string[]): string {
   return `<ul class="cv-highlights">${items}</ul>`
 }
 
-function renderEducation(education: CvData['education']): string {
+function renderEducation(education: CvData['education'], sectionId = '', cssClass = ''): string {
   const items = education.items
     .map(
       (item) => `<div class="cv-entry">
@@ -63,10 +69,10 @@ function renderEducation(education: CvData['education']): string {
 </div>`,
     )
     .join('\n')
-  return renderSection(education.title, items)
+  return renderSection(education.title, items, sectionId, cssClass)
 }
 
-function renderExperience(experience: CvData['experience']): string {
+function renderExperience(experience: CvData['experience'], sectionId = '', cssClass = ''): string {
   const items = experience.items
     .map(
       (item) => `<div class="cv-entry">
@@ -82,10 +88,10 @@ function renderExperience(experience: CvData['experience']): string {
 </div>`,
     )
     .join('\n')
-  return renderSection(experience.title, items)
+  return renderSection(experience.title, items, sectionId, cssClass)
 }
 
-function renderProjects(projects: CvData['projects']): string {
+function renderProjects(projects: CvData['projects'], sectionId = '', cssClass = ''): string {
   const items = projects.items
     .map(
       (item) => `<div class="cv-entry">
@@ -100,10 +106,10 @@ function renderProjects(projects: CvData['projects']): string {
 </div>`,
     )
     .join('\n')
-  return renderSection(projects.title, items)
+  return renderSection(projects.title, items, sectionId, cssClass)
 }
 
-function renderSkills(skills: CvData['skills']): string {
+function renderSkills(skills: CvData['skills'], sectionId = '', cssClass = ''): string {
   const items = skills.categories
     .map(
       (cat) =>
@@ -113,10 +119,12 @@ function renderSkills(skills: CvData['skills']): string {
   return renderSection(
     skills.title,
     `<ul class="cv-skills-list">${items}</ul>`,
+    sectionId,
+    cssClass,
   )
 }
 
-function renderLanguages(languages: CvData['languages']): string {
+function renderLanguages(languages: CvData['languages'], sectionId = '', cssClass = ''): string {
   const items = languages.items
     .map(
       (lang) =>
@@ -126,6 +134,8 @@ function renderLanguages(languages: CvData['languages']): string {
   return renderSection(
     languages.title,
     `<ul class="cv-languages-list">${items}</ul>`,
+    sectionId,
+    cssClass,
   )
 }
 
@@ -142,6 +152,108 @@ function loadCss(templateId: TemplateId): string {
 
   cssCache.set(templateId, css)
   return css
+}
+
+function isSectionEmpty(key: string, cvData: CvData): boolean {
+  switch (key) {
+    case 'header': return !cvData.header.name
+    case 'summary': return !cvData.summary.text
+    case 'education': return cvData.education.items.length === 0
+    case 'experience': return cvData.experience.items.length === 0
+    case 'projects': return cvData.projects.items.length === 0
+    case 'skills': return cvData.skills.categories.length === 0
+    case 'languages': return cvData.languages.items.length === 0
+    default: {
+      const cs = cvData.customSections?.find(s => s.id === key)
+      return !cs || cs.items.length === 0
+    }
+  }
+}
+
+const GHOST_CSS = `
+.cv-sample-section { opacity: 0.3; transition: opacity 0.3s ease; }
+.cv-user-section { opacity: 1; }
+[data-section].cv-active-section {
+  outline: 2px dashed #e87040;
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+`
+
+const GHOST_SCRIPT = `
+<script>
+window.addEventListener('message', function(e) {
+  if (e.data && e.data.type === 'highlight-section') {
+    document.querySelectorAll('[data-section]').forEach(function(el) {
+      el.classList.remove('cv-active-section');
+    });
+    var t = document.querySelector('[data-section="' + e.data.section + '"]');
+    if (t) {
+      t.classList.add('cv-active-section');
+      t.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  }
+});
+</script>
+`
+
+export function renderGhostPreview(userData: CvData, sampleData: CvData): string {
+  const templateId = isValidTemplateId(userData.meta.templateId)
+    ? userData.meta.templateId
+    : DEFAULT_TEMPLATE_ID
+  const css = loadCss(templateId)
+
+  const DEFAULT_ORDER = ['summary', 'education', 'experience', 'projects', 'skills', 'languages'] as const
+  const order = userData.meta.sectionOrder ?? DEFAULT_ORDER
+
+  const pick = (key: string) => {
+    const empty = isSectionEmpty(key, userData)
+    const source = empty ? sampleData : userData
+    const cls = empty ? 'cv-sample-section' : 'cv-user-section'
+    return { source, cls }
+  }
+
+  const headerPick = pick('header')
+  const headerHtml = renderHeader(headerPick.source.header, headerPick.cls, 'header')
+
+  const sectionHtml = order.map(k => {
+    if (k.startsWith('custom-')) {
+      const cs = userData.customSections?.find(s => s.id === k)
+      if (!cs || cs.items.length === 0) return ''
+      const items = cs.items.map(item => `<li>${escapeHtml(item.text)}</li>`).join('\n')
+      return renderSection(cs.title, `<ul class="cv-highlights">${items}</ul>`, k, 'cv-user-section')
+    }
+
+    const { source, cls } = pick(k)
+
+    const renderers: Record<string, () => string> = {
+      summary: () => renderSummary(source.summary, k, cls),
+      education: () => renderEducation(source.education, k, cls),
+      experience: () => renderExperience(source.experience, k, cls),
+      projects: () => renderProjects(source.projects, k, cls),
+      skills: () => renderSkills(source.skills, k, cls),
+      languages: () => renderLanguages(source.languages, k, cls),
+    }
+
+    return renderers[k]?.() ?? ''
+  }).join('\n')
+
+  const body = [headerHtml, sectionHtml].join('\n')
+
+  return `<!doctype html>
+<html lang="${escapeHtml(userData.meta.locale)}">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>${css}${GHOST_CSS}</style>
+</head>
+<body>
+  <main class="cv-page">
+    ${body}
+  </main>
+${GHOST_SCRIPT}
+</body>
+</html>`
 }
 
 export function renderCvPreview(cvData: CvData): string {

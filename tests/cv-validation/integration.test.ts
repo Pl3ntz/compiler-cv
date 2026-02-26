@@ -83,4 +83,37 @@ describe('runRuleBasedChecks (integration)', () => {
     // Should have critical issues for missing essential sections
     expect(allIssues.some(i => i.priority === 'critical')).toBe(true)
   })
+
+  it('full CV in EN has many positives and messages in English', () => {
+    const result = runRuleBasedChecks(makeFullCv(), 'en')
+    const allPositives = Object.values(result.sections).flatMap(s => s.positives)
+    expect(allPositives.length).toBeGreaterThanOrEqual(10)
+    // Spot-check English messages
+    expect(allPositives.some(p => p.text === 'Name is present')).toBe(true)
+    expect(allPositives.some(p => p.text === 'Work experience section is filled')).toBe(true)
+  })
+
+  it('full CV in PT has many positives and messages in Portuguese', () => {
+    const cv = makeFullCv()
+    cv.locale = 'pt'
+    const result = runRuleBasedChecks(cv, 'pt')
+    const allPositives = Object.values(result.sections).flatMap(s => s.positives)
+    expect(allPositives.length).toBeGreaterThanOrEqual(10)
+    // Spot-check Portuguese messages
+    expect(allPositives.some(p => p.text === 'Nome preenchido')).toBe(true)
+    expect(allPositives.some(p => p.text === 'Seção de experiência preenchida')).toBe(true)
+  })
+
+  it('empty CV has zero positives', () => {
+    const result = runRuleBasedChecks(makeEmptyCv(), 'en')
+    const allPositives = Object.values(result.sections).flatMap(s => s.positives)
+    expect(allPositives).toHaveLength(0)
+  })
+
+  it('every section has positives array', () => {
+    const result = runRuleBasedChecks(makeFullCv(), 'en')
+    for (const section of Object.values(result.sections)) {
+      expect(Array.isArray(section.positives)).toBe(true)
+    }
+  })
 })

@@ -7,6 +7,7 @@ describe('checkFormatting', () => {
     const result = checkFormatting(makeFullCv(), 'en')
     expect(result.earned).toBeGreaterThanOrEqual(10)
     expect(result.max).toBe(15)
+    expect(result.positives.length).toBeGreaterThan(0)
   })
 
   it('flags empty CV', () => {
@@ -48,5 +49,10 @@ describe('checkFormatting', () => {
     ]
     const result = checkFormatting(cv, 'en')
     expect(result.issues.some(i => i.text.includes('ATS-friendly'))).toBe(true)
+  })
+
+  it('returns positives in Portuguese when locale is pt', () => {
+    const result = checkFormatting(makeFullCv(), 'pt')
+    expect(result.positives.some(p => p.text.includes('bullet points'))).toBe(true)
   })
 })

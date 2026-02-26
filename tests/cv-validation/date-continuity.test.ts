@@ -8,6 +8,7 @@ describe('checkDateContinuity', () => {
     expect(result.earned).toBe(5)
     expect(result.max).toBe(5)
     expect(result.issues).toHaveLength(0)
+    expect(result.positives.length).toBeGreaterThan(0)
   })
 
   it('gives full score for empty experience (no penalty)', () => {
@@ -52,5 +53,10 @@ describe('checkDateContinuity', () => {
     ]
     const result = checkDateContinuity(cv, 'en')
     expect(result.earned).toBe(5)
+  })
+
+  it('returns positives in Portuguese when locale is pt', () => {
+    const result = checkDateContinuity(makeFullCv(), 'pt')
+    expect(result.positives.some(p => p.text === 'Todas as datas de emprego são interpretáveis')).toBe(true)
   })
 })

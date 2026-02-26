@@ -15,10 +15,16 @@ export const atsSuggestionSchema = z.object({
   section: sectionKey.optional(),
 })
 
+export const atsPositiveSchema = z.object({
+  text: z.string(),
+  section: sectionKey.optional(),
+})
+
 export const atsScoreResponseSchema = z.object({
   overallScore: z.number().int().min(0).max(100),
   categories: z.array(atsCategorySchema),
   suggestions: z.array(atsSuggestionSchema),
+  positives: z.array(atsPositiveSchema).optional(),
   ruleScore: z.number().int().min(0).max(100).optional(),
   llmGrade: z.enum(['A', 'B', 'C', 'D', 'F']).optional(),
   breakdown: z.object({

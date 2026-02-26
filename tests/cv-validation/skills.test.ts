@@ -8,12 +8,14 @@ describe('checkSkills', () => {
     expect(result.earned).toBe(12)
     expect(result.max).toBe(12)
     expect(result.issues).toHaveLength(0)
+    expect(result.positives.length).toBeGreaterThan(0)
   })
 
   it('gives 0 for empty skills', () => {
     const result = checkSkills(makeEmptyCv(), 'en')
     expect(result.earned).toBe(0)
     expect(result.issues.some(i => i.priority === 'critical')).toBe(true)
+    expect(result.positives).toHaveLength(0)
   })
 
   it('penalizes single category', () => {
@@ -45,5 +47,10 @@ describe('checkSkills', () => {
     ]
     const result = checkSkills(cv, 'en')
     expect(result.issues.some(i => i.text.includes('empty name or values'))).toBe(true)
+  })
+
+  it('returns positives in Portuguese when locale is pt', () => {
+    const result = checkSkills(makeFullCv(), 'pt')
+    expect(result.positives.some(p => p.text === 'Seção de habilidades preenchida')).toBe(true)
   })
 })
